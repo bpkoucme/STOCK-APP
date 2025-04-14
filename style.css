@@ -1,80 +1,81 @@
 /* Style général */
 body {
-    margin: 0;
-    padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f0f2f5;
+  margin: 0;
+  padding: 0;
+  font-family: Arial, sans-serif;
+  background: #f5f7fa;
+  display: flex;
+  justify-content: center;
+  align-items: flex-start;
+  min-height: 100vh;
+  padding-top: 30px;
 }
 
-/* En-tête avec le nom de l'entreprise */
-header {
-    background-color: #00796b;
-    color: white;
-    padding: 15px 0;
-    text-align: center;
-    font-size: 24px;
-    font-weight: bold;
-    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+/* En-tête de l'entreprise */
+h1 {
+  text-align: center;
+  color: #2c3e50;
+  margin-bottom: 20px;
 }
 
-/* Container des boutons */
+/* Conteneur principal */
 .container {
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: center;
-    margin: 20px auto;
-    max-width: 600px;
+  background: #ffffff;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  width: 350px;
+  text-align: center;
 }
 
-/* Style des boutons */
+/* Boutons */
 button {
-    background-color: #00796b;
-    color: white;
-    border: none;
-    padding: 15px 30px;
-    margin: 10px;
-    font-size: 16px;
-    border-radius: 8px;
-    cursor: pointer;
-    transition: background 0.3s ease;
+  padding: 10px 20px;
+  border: none;
+  border-radius: 8px;
+  background-color: #3498db;
+  color: white;
+  cursor: pointer;
+  margin: 10px 5px;
+  font-size: 16px;
+  transition: background-color 0.3s ease;
 }
 
 button:hover {
-    background-color: #004d40;
+  background-color: #2980b9;
 }
 
-/* Boîte pour messages d'erreur ou alertes */
-.message {
-    text-align: center;
-    color: red;
-    margin-top: 20px;
+/* Section cachée par défaut */
+#roleSection,
+#vendeurSection,
+#adminSection {
+  display: none;
 }
 
-/* Champs d'entrée */
-input[type="text"], input[type="number"], input[type="password"] {
-    width: 80%;
-    padding: 12px;
-    margin: 8px auto;
-    display: block;
-    border: 1px solid #ccc;
-    border-radius: 6px;
+/* Input code */
+input[type="text"] {
+  padding: 10px;
+  width: 80%;
+  margin: 15px 0;
+  border: 1px solid #ccc;
+  border-radius: 8px;
 }
 
-/* Tableau de stock (admin) */
-table {
-    width: 90%;
-    margin: 20px auto;
-    border-collapse: collapse;
-    background: white;
+/* Historique */
+#historique {
+  margin-top: 15px;
+  max-height: 300px;
+  overflow-y: auto;
+  background: #ecf0f1;
+  padding: 10px;
+  border-radius: 8px;
+  text-align: left;
 }
 
-table th, table td {
-    border: 1px solid #ddd;
-    padding: 12px;
-    text-align: center;
-}
-
-table th {
-    background-color: #00796b;
-    color: white;
+#historique div {
+  margin-bottom: 8px;
+  padding: 8px;
+  background: white;
+  border-radius: 6px;
+  border: 1px solid #ccc;
 }
