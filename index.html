@@ -3,293 +3,314 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestionnaire de Stocks</title>
+    <title>Gestion de Stock - Magasin Principal</title>
     <style>
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            min-height: 100vh;
+            font-family: Arial, sans-serif;
             margin: 0;
-            background: #f0f2f5;
-            padding: 20px;
-            box-sizing: border-box;
-        }
-        
-        header {
-            text-align: center;
-            margin-bottom: 30px;
-        }
-        
-        header img {
-            width: 150px;
-            height: auto;
-            margin-bottom: 15px;
-        }
-        
-        h1 {
-            margin: 0 0 30px 0;
-            color: #2c3e50;
-            font-size: 28px;
+            padding: 0;
+            background-color: #f5f5f5;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
         }
         
         .container {
             background: white;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             padding: 30px;
-            border-radius: 12px;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-            width: 100%;
+            width: 90%;
             max-width: 500px;
             text-align: center;
         }
         
-        .buttons {
-            display: flex;
-            flex-direction: column;
-            gap: 15px;
-            margin: 20px 0;
+        .logo {
+            width: 150px;
+            margin-bottom: 20px;
+        }
+        
+        h1 {
+            color: #333;
+            margin-bottom: 30px;
+        }
+        
+        .input-group {
+            margin-bottom: 20px;
+            text-align: left;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
         }
         
         button {
-            padding: 15px 25px;
-            border: none;
-            background-color: #3498db;
+            background-color: #4CAF50;
             color: white;
-            font-size: 16px;
-            font-weight: 500;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
             cursor: pointer;
-            border-radius: 8px;
-            transition: all 0.3s ease;
+            font-size: 16px;
             width: 100%;
+            margin-top: 10px;
+            transition: background 0.3s;
         }
         
         button:hover {
-            background-color: #2980b9;
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            background-color: #45a049;
         }
         
-        button:active {
-            transform: translateY(0);
+        .role-buttons {
+            display: flex;
+            gap: 15px;
+            margin-top: 30px;
         }
         
-        .modal {
+        .role-buttons button {
+            flex: 1;
+        }
+        
+        .admin-btn {
+            background-color: #2196F3;
+        }
+        
+        .admin-btn:hover {
+            background-color: #0b7dda;
+        }
+        
+        .vendeur-btn {
+            background-color: #ff9800;
+        }
+        
+        .vendeur-btn:hover {
+            background-color: #e68a00;
+        }
+        
+        .dashboard {
             display: none;
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            z-index: 1000;
-            justify-content: center;
-            align-items: center;
         }
         
-        .modal-content {
+        .menu {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 30px;
+        }
+        
+        .menu-item {
             background: white;
-            padding: 25px;
-            border-radius: 10px;
-            width: 90%;
-            max-width: 500px;
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
-        }
-        
-        .close-btn {
-            float: right;
-            font-size: 22px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
             cursor: pointer;
+            transition: all 0.3s;
         }
         
-        @media (max-width: 600px) {
-            .container {
-                padding: 20px;
-            }
-            
-            h1 {
-                font-size: 24px;
-            }
+        .menu-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        .menu-item h3 {
+            margin-top: 0;
+            color: #333;
+        }
+        
+        .menu-item p {
+            color: #666;
+            margin-bottom: 0;
+        }
+        
+        .back-btn {
+            background-color: #f44336;
+            margin-top: 20px;
+        }
+        
+        .back-btn:hover {
+            background-color: #d32f2f;
+        }
+        
+        .hidden {
+            display: none;
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <header>
-            <img src="logo.png" alt="Logo de l'entreprise" id="logo">
-            <h1>Gestionnaire de Stocks</h1>
-        </header>
+    <!-- Page d'accueil / Connexion -->
+    <div class="container" id="loginPage">
+        <img src="logo.png" alt="Logo du magasin" class="logo">
+        <h1>Gestion de Stock<br>Magasin Principal</h1>
         
-        <div class="buttons">
-            <button id="entreeBtn">Entrée</button>
-            <button id="sortieBtn">Sortie</button>
-            <button id="scannerBtn">Scanner Code-Barres</button>
-            <button id="rapportBtn">Rapport</button>
+        <div class="input-group">
+            <label for="accessCode">Code d'accès</label>
+            <input type="password" id="accessCode" placeholder="Entrez le code d'accès">
         </div>
+        
+        <button id="loginBtn">Accéder</button>
     </div>
     
-    <!-- Modal pour les différentes actions -->
-    <div class="modal" id="actionModal">
-        <div class="modal-content">
-            <span class="close-btn" id="closeModal">&times;</span>
-            <h2 id="modalTitle">Titre</h2>
-            <div id="modalContent">
-                <!-- Contenu dynamique -->
+    <!-- Page de sélection de rôle -->
+    <div class="container hidden" id="rolePage">
+        <img src="logo.png" alt="Logo du magasin" class="logo">
+        <h1>Sélectionnez votre rôle</h1>
+        
+        <div class="role-buttons">
+            <button class="admin-btn" id="adminBtn">Administrateur</button>
+            <button class="vendeur-btn" id="vendeurBtn">Vendeur</button>
+        </div>
+        
+        <button class="back-btn" id="backToLogin1">Retour</button>
+    </div>
+    
+    <!-- Tableau de bord Admin -->
+    <div class="container hidden" id="adminDashboard">
+        <img src="logo.png" alt="Logo du magasin" class="logo">
+        <h1>Espace Administrateur</h1>
+        
+        <div class="menu">
+            <div class="menu-item" id="adminStock">
+                <h3>Marchandises</h3>
+                <p>Gestion du stock</p>
+            </div>
+            <div class="menu-item" id="adminReports">
+                <h3>Rapports</h3>
+                <p>Dépenses et statistiques</p>
+            </div>
+            <div class="menu-item" id="adminEntries">
+                <h3>Créer Entrée</h3>
+                <p>Ajouter des produits</p>
+            </div>
+            <div class="menu-item" id="adminExits">
+                <h3>Créer Sortie</h3>
+                <p>Sortie de produits</p>
             </div>
         </div>
+        
+        <button class="back-btn" id="backToRole1">Retour</button>
+    </div>
+    
+    <!-- Tableau de bord Vendeur -->
+    <div class="container hidden" id="vendeurDashboard">
+        <img src="logo.png" alt="Logo du magasin" class="logo">
+        <h1>Espace Vendeur</h1>
+        
+        <div class="menu">
+            <div class="menu-item" id="vendeurScan">
+                <h3>Scan code-barres</h3>
+                <p>Scanner des produits</p>
+            </div>
+            <div class="menu-item" id="vendeurHelp">
+                <h3>Besoin d'aide ?</h3>
+                <p>Support technique</p>
+            </div>
+        </div>
+        
+        <button class="back-btn" id="backToRole2">Retour</button>
     </div>
 
     <script>
-        // Récupération des éléments DOM
-        const entreeBtn = document.getElementById('entreeBtn');
-        const sortieBtn = document.getElementById('sortieBtn');
-        const scannerBtn = document.getElementById('scannerBtn');
-        const rapportBtn = document.getElementById('rapportBtn');
-        const actionModal = document.getElementById('actionModal');
-        const closeModal = document.getElementById('closeModal');
-        const modalTitle = document.getElementById('modalTitle');
-        const modalContent = document.getElementById('modalContent');
+        // Éléments DOM
+        const loginPage = document.getElementById('loginPage');
+        const rolePage = document.getElementById('rolePage');
+        const adminDashboard = document.getElementById('adminDashboard');
+        const vendeurDashboard = document.getElementById('vendeurDashboard');
+        const accessCodeInput = document.getElementById('accessCode');
+        const loginBtn = document.getElementById('loginBtn');
+        const adminBtn = document.getElementById('adminBtn');
+        const vendeurBtn = document.getElementById('vendeurBtn');
+        const backToLogin1 = document.getElementById('backToLogin1');
+        const backToRole1 = document.getElementById('backToRole1');
+        const backToRole2 = document.getElementById('backToRole2');
         
-        // Gestion des événements
-        entreeBtn.addEventListener('click', gererEntree);
-        sortieBtn.addEventListener('click', gererSortie);
-        scannerBtn.addEventListener('click', scannerCodeBarre);
-        rapportBtn.addEventListener('click', voirRapport);
-        closeModal.addEventListener('click', fermerModal);
+        // Code d'accès valide
+        const VALID_CODE = "16181694y";
         
-        // Fermer la modal si on clique en dehors
-        window.addEventListener('click', (event) => {
-            if (event.target === actionModal) {
-                fermerModal();
+        // Gestionnaires d'événements
+        loginBtn.addEventListener('click', () => {
+            if (accessCodeInput.value === VALID_CODE) {
+                loginPage.classList.add('hidden');
+                rolePage.classList.remove('hidden');
+                accessCodeInput.value = "";
+            } else {
+                alert("Code incorrect. Veuillez réessayer.");
             }
         });
         
-        // Fonctions principales
-        function gererEntree() {
-            modalTitle.textContent = "Gestion des Entrées";
-            modalContent.innerHTML = `
-                <form id="formEntree">
-                    <div style="margin-bottom: 15px;">
-                        <label for="produit" style="display: block; margin-bottom: 5px; text-align: left;">Produit:</label>
-                        <input type="text" id="produit" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <label for="quantite" style="display: block; margin-bottom: 5px; text-align: left;">Quantité:</label>
-                        <input type="number" id="quantite" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <label for="fournisseur" style="display: block; margin-bottom: 5px; text-align: left;">Fournisseur:</label>
-                        <input type="text" id="fournisseur" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                    </div>
-                    <button type="submit" style="background-color: #2ecc71; margin-top: 10px;">Enregistrer</button>
-                </form>
-            `;
-            
-            document.getElementById('formEntree').addEventListener('submit', (e) => {
-                e.preventDefault();
-                // Ici tu peux ajouter la logique Firebase
-                alert("Entrée enregistrée avec succès!");
-                fermerModal();
-            });
-            
-            ouvrirModal();
-        }
+        adminBtn.addEventListener('click', () => {
+            rolePage.classList.add('hidden');
+            adminDashboard.classList.remove('hidden');
+        });
         
-        function gererSortie() {
-            modalTitle.textContent = "Gestion des Sorties";
-            modalContent.innerHTML = `
-                <form id="formSortie">
-                    <div style="margin-bottom: 15px;">
-                        <label for="produitSortie" style="display: block; margin-bottom: 5px; text-align: left;">Produit:</label>
-                        <input type="text" id="produitSortie" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <label for="quantiteSortie" style="display: block; margin-bottom: 5px; text-align: left;">Quantité:</label>
-                        <input type="number" id="quantiteSortie" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                    </div>
-                    <div style="margin-bottom: 15px;">
-                        <label for="destination" style="display: block; margin-bottom: 5px; text-align: left;">Destination:</label>
-                        <input type="text" id="destination" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
-                    </div>
-                    <button type="submit" style="background-color: #e74c3c; margin-top: 10px;">Enregistrer</button>
-                </form>
-            `;
-            
-            document.getElementById('formSortie').addEventListener('submit', (e) => {
-                e.preventDefault();
-                // Ici tu peux ajouter la logique Firebase
-                alert("Sortie enregistrée avec succès!");
-                fermerModal();
-            });
-            
-            ouvrirModal();
-        }
+        vendeurBtn.addEventListener('click', () => {
+            rolePage.classList.add('hidden');
+            vendeurDashboard.classList.remove('hidden');
+        });
         
-        function scannerCodeBarre() {
-            modalTitle.textContent = "Scanner un Code-Barres";
-            modalContent.innerHTML = `
-                <div style="text-align: center;">
-                    <div id="scanner-container" style="width: 100%; height: 300px; background: #f9f9f9; border: 2px dashed #ccc; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
-                        <p>Zone de scan</p>
-                    </div>
-                    <p>Ou entrer manuellement le code:</p>
-                    <input type="text" placeholder="Code à barres" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 15px;">
-                    <button style="background-color: #9b59b6;">Valider</button>
-                </div>
-            `;
-            
-            ouvrirModal();
-            
-            // Ici tu pourrais intégrer un scanner réel (ex: QuaggaJS ou l'API Web)
-        }
+        backToLogin1.addEventListener('click', () => {
+            rolePage.classList.add('hidden');
+            loginPage.classList.remove('hidden');
+        });
         
-        function voirRapport() {
-            modalTitle.textContent = "Rapport de Stock";
-            modalContent.innerHTML = `
-                <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse;">
-                        <thead>
-                            <tr style="background-color: #3498db; color: white;">
-                                <th style="padding: 10px; text-align: left;">Produit</th>
-                                <th style="padding: 10px; text-align: left;">Quantité</th>
-                                <th style="padding: 10px; text-align: left;">Dernière Mise à jour</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 10px;">Produit A</td>
-                                <td style="padding: 10px;">150</td>
-                                <td style="padding: 10px;">15/04/2023</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 10px;">Produit B</td>
-                                <td style="padding: 10px;">75</td>
-                                <td style="padding: 10px;">14/04/2023</td>
-                            </tr>
-                            <tr style="border-bottom: 1px solid #ddd;">
-                                <td style="padding: 10px;">Produit C</td>
-                                <td style="padding: 10px;">42</td>
-                                <td style="padding: 10px;">13/04/2023</td>
-                            </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <button style="margin-top: 20px; background-color: #f39c12;">Exporter en PDF</button>
-            `;
-            
-            ouvrirModal();
-            
-            // Ici tu pourrais récupérer les données depuis Firebase
-        }
+        backToRole1.addEventListener('click', () => {
+            adminDashboard.classList.add('hidden');
+            rolePage.classList.remove('hidden');
+        });
         
-        function ouvrirModal() {
-            actionModal.style.display = 'flex';
-        }
+        backToRole2.addEventListener('click', () => {
+            vendeurDashboard.classList.add('hidden');
+            rolePage.classList.remove('hidden');
+        });
         
-        function fermerModal() {
-            actionModal.style.display = 'none';
-        }
+        // Fonctionnalités Admin
+        document.getElementById('adminStock').addEventListener('click', () => {
+            alert("Affichage des marchandises en stock...");
+            // Ici vous intégrerez la connexion à votre base de données
+        });
+        
+        document.getElementById('adminReports').addEventListener('click', () => {
+            alert("Affichage des rapports de dépenses...");
+            // Ici vous intégrerez la connexion à votre base de données
+        });
+        
+        document.getElementById('adminEntries').addEventListener('click', () => {
+            alert("Création d'une entrée de stock...");
+            // Ici vous intégrerez la connexion à votre base de données
+        });
+        
+        document.getElementById('adminExits').addEventListener('click', () => {
+            alert("Création d'une sortie de stock...");
+            // Ici vous intégrerez la connexion à votre base de données
+        });
+        
+        // Fonctionnalités Vendeur
+        document.getElementById('vendeurScan').addEventListener('click', () => {
+            alert("Lancement du scanner code-barres...");
+            // Ici vous pourriez intégrer un scanner réel
+        });
+        
+        document.getElementById('vendeurHelp').addEventListener('click', () => {
+            alert("Contactez le support technique au 01 23 45 67 89");
+        });
+        
+        // Permettre la connexion avec la touche Entrée
+        accessCodeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                loginBtn.click();
+            }
+        });
     </script>
 </body>
 </html>
