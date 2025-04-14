@@ -1,81 +1,67 @@
 /* Style général */
 body {
-  margin: 0;
-  padding: 0;
-  font-family: Arial, sans-serif;
-  background: #f5f7fa;
-  display: flex;
-  justify-content: center;
-  align-items: flex-start;
-  min-height: 100vh;
-  padding-top: 30px;
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background: #f4f4f4;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
 
-/* En-tête de l'entreprise */
-h1 {
-  text-align: center;
-  color: #2c3e50;
-  margin-bottom: 20px;
+header {
+    width: 100%;
+    background: #2c3e50;
+    padding: 20px;
+    text-align: center;
 }
 
-/* Conteneur principal */
-.container {
-  background: #ffffff;
-  padding: 20px;
-  border-radius: 12px;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-  width: 350px;
-  text-align: center;
+header h1 {
+    color: #fff;
+    margin: 0;
+    font-size: 24px;
 }
 
-/* Boutons */
+main {
+    margin-top: 30px;
+    width: 90%;
+    max-width: 500px;
+    background: #fff;
+    padding: 20px;
+    border-radius: 12px;
+    box-shadow: 0 4px 8px rgba(0,0,0,0.1);
+}
+
+h2 {
+    text-align: center;
+    color: #333;
+}
+
+input[type="password"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+}
+
 button {
-  padding: 10px 20px;
-  border: none;
-  border-radius: 8px;
-  background-color: #3498db;
-  color: white;
-  cursor: pointer;
-  margin: 10px 5px;
-  font-size: 16px;
-  transition: background-color 0.3s ease;
+    display: block;
+    width: 100%;
+    margin: 10px 0;
+    padding: 12px;
+    background: #3498db;
+    color: #fff;
+    border: none;
+    border-radius: 8px;
+    cursor: pointer;
+    font-size: 16px;
 }
 
 button:hover {
-  background-color: #2980b9;
+    background: #2980b9;
 }
 
-/* Section cachée par défaut */
-#roleSection,
-#vendeurSection,
-#adminSection {
-  display: none;
-}
-
-/* Input code */
-input[type="text"] {
-  padding: 10px;
-  width: 80%;
-  margin: 15px 0;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-}
-
-/* Historique */
-#historique {
-  margin-top: 15px;
-  max-height: 300px;
-  overflow-y: auto;
-  background: #ecf0f1;
-  padding: 10px;
-  border-radius: 8px;
-  text-align: left;
-}
-
-#historique div {
-  margin-bottom: 8px;
-  padding: 8px;
-  background: white;
-  border-radius: 6px;
-  border: 1px solid #ccc;
+#stockDisplay {
+    margin-top: 20px;
 }
