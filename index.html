@@ -1,94 +1,106 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Application de Gestion de Stock</title>
-    <style>
-        body { 
-            font-family: Arial, sans-serif; 
-            background: #f5f5f5; 
-            text-align: center; 
-            padding: 20px; 
-        }
-        h1 { 
-            color: #333; 
-        }
-        input, button { 
-            padding: 10px; 
-            margin: 10px; 
-            font-size: 16px; 
-        }
-        table { 
-            margin: 20px auto; 
-            border-collapse: collapse; 
-            width: 80%; 
-            background: white; 
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-        }
-        th, td { 
-            border: 1px solid #ccc; 
-            padding: 10px; 
-            text-align: center; 
-        }
-        th { 
-            background: #eee; 
-        }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Gestion de Stock - BON PRIX KOUCMÉ</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      padding: 20px;
+    }
+    img {
+      max-width: 150px;
+      margin-bottom: 20px;
+    }
+    input, button {
+      margin: 5px;
+      padding: 8px;
+    }
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin-top: 20px;
+    }
+    th, td {
+      border: 1px solid black;
+      padding: 8px;
+    }
+  </style>
 </head>
 <body>
 
-    <h1>Gestion de Stock - Mon Magasin</h1>
+  <!-- TON LOGO EN HAUT -->
+  <img src="https://raw.githubusercontent.com/ton-utilisateur/ton-repo/main/chemin-du-logo/logo.png" alt="BON PRIX KOUCMÉ">
 
-    <input type="text" id="productName" placeholder="Nom du produit">
-    <input type="number" id="productQty" placeholder="Quantité">
-    <button onclick="addProduct()">Ajouter au stock</button>
+  <h1>Gestion de Stock</h1>
 
-    <h2>Liste des produits</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Produit</th>
-                <th>Quantité</th>
-            </tr>
-        </thead>
-        <tbody id="stockTable">
-            <!-- Les produits vont s'afficher ici -->
-        </tbody>
-    </table>
+  <input type="text" id="productName" placeholder="Nom du produit">
+  <input type="number" id="productQty" placeholder="Quantité">
+  <button onclick="addProduct()">Ajouter</button>
 
-    <script>
-        let stock = JSON.parse(localStorage.getItem('stock')) || [];
+  <table id="stockTable">
+    <tr><th>Produit</th><th>Quantité</th></tr>
+  </table>
 
-        function saveStock() {
-            localStorage.setItem('stock', JSON.stringify(stock));
-        }
+  <!-- Firebase SDK -->
+  <script type="module">
+    // Importation Firebase
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-app.js";
+    import { getFirestore, collection, addDoc, getDocs } from "https://www.gstatic.com/firebasejs/10.11.0/firebase-firestore.js";
 
-        function renderStock() {
-            const table = document.getElementById('stockTable');
-            table.innerHTML = '';
-            stock.forEach(item => {
-                let row = `<tr><td>${item.name}</td><td>${item.qty}</td></tr>`;
-                table.innerHTML += row;
-            });
-        }
+    // Configuration Firebase
+    const firebaseConfig = {
+      apiKey: "AIzaSyBOFN1uxZKtcVc_kstMe1mHoaFY9CNS3uA",
+      authDomain: "monstockapp-73c82.firebaseapp.com",
+      projectId: "monstockapp-73c82",
+      storageBucket: "monstockapp-73c82.firebasestorage.app",
+      messagingSenderId: "903263639703",
+      appId: "1:903263639703:web:ff08550aa21db9c25231d2"
+    };
 
-        function addProduct() {
-            const name = document.getElementById('productName').value.trim();
-            const qty = parseInt(document.getElementById('productQty').value);
-            if (name && qty > 0) {
-                stock.push({ name, qty });
-                saveStock();
-                renderStock();
-                document.getElementById('productName').value = '';
-                document.getElementById('productQty').value = '';
-            } else {
-                alert('Entrez un nom de produit et une quantité valide.');
-            }
-        }
+    // Initialiser Firebase
+    const app = initializeApp(firebaseConfig);
+    const db = getFirestore(app);
 
-        renderStock();
-    </script>
+    async function addProduct() {
+      const name = document.getElementById('productName').value.trim();
+      const qty = parseInt(document.getElementById('productQty').value);
+
+      if (!name || qty <= 0) {
+        alert("Entrez un nom de produit et une quantité valide.");
+        return;
+      }
+
+      try {
+        await addDoc(collection(db, "stocks"), {
+          name: name,
+          qty: qty
+        });
+        alert("Produit ajouté !");
+        document.getElementById('productName').value = '';
+        document.getElementById('productQty').value = '';
+        loadProducts();
+      } catch (e) {
+        console.error("Erreur lors de l'ajout :", e);
+      }
+    }
+
+    async function loadProducts() {
+      const table = document.getElementById('stockTable');
+      table.innerHTML = '<tr><th>Produit</th><th>Quantité</th></tr>';
+
+      const querySnapshot = await getDocs(collection(db, "stocks"));
+      querySnapshot.forEach((doc) => {
+        const data = doc.data();
+        table.innerHTML += `<tr><td>${data.name}</td><td>${data.qty}</td></tr>`;
+      });
+    }
+
+    // Charger les produits existants au démarrage
+    loadProducts();
+  </script>
 
 </body>
 </html>
