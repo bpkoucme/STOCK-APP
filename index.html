@@ -10,10 +10,6 @@
             margin: 0;
             padding: 0;
             background-color: #f5f5f5;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
         }
         
         .container {
@@ -22,84 +18,20 @@
             box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
             padding: 30px;
             width: 90%;
-            max-width: 500px;
-            text-align: center;
+            max-width: 1000px;
+            margin: 20px auto;
         }
         
         .logo {
             width: 150px;
-            margin-bottom: 20px;
+            display: block;
+            margin: 0 auto 20px;
         }
         
         h1 {
             color: #333;
+            text-align: center;
             margin-bottom: 30px;
-        }
-        
-        .input-group {
-            margin-bottom: 20px;
-            text-align: left;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
-        }
-        
-        input {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
-        }
-        
-        button {
-            background-color: #4CAF50;
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            width: 100%;
-            margin-top: 10px;
-            transition: background 0.3s;
-        }
-        
-        button:hover {
-            background-color: #45a049;
-        }
-        
-        .role-buttons {
-            display: flex;
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .role-buttons button {
-            flex: 1;
-        }
-        
-        .admin-btn {
-            background-color: #2196F3;
-        }
-        
-        .admin-btn:hover {
-            background-color: #0b7dda;
-        }
-        
-        .vendeur-btn {
-            background-color: #ff9800;
-        }
-        
-        .vendeur-btn:hover {
-            background-color: #e68a00;
-        }
-        
-        .dashboard {
-            display: none;
         }
         
         .menu {
@@ -124,193 +56,179 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
         }
         
-        .menu-item h3 {
-            margin-top: 0;
-            color: #333;
+        .section {
+            display: none;
+            margin-top: 30px;
+            animation: fadeIn 0.5s;
         }
         
-        .menu-item p {
-            color: #666;
-            margin-bottom: 0;
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        
+        .active {
+            display: block;
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 20px;
+        }
+        
+        th, td {
+            border: 1px solid #ddd;
+            padding: 12px;
+            text-align: left;
+        }
+        
+        th {
+            background-color: #f2f2f2;
+        }
+        
+        .form-group {
+            margin-bottom: 15px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+        
+        input, select {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        
+        button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+            margin-top: 10px;
+            transition: background 0.3s;
+        }
+        
+        button:hover {
+            background-color: #45a049;
+        }
+        
+        .scanner-container {
+            width: 100%;
+            height: 300px;
+            background: #f9f9f9;
+            border: 2px dashed #ccc;
+            margin: 20px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        #video {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        #canvas {
+            display: none;
+        }
+        
+        .scan-result {
+            margin-top: 20px;
+            padding: 15px;
+            background: #f0f0f0;
+            border-radius: 5px;
         }
         
         .back-btn {
             background-color: #f44336;
             margin-top: 20px;
         }
-        
-        .back-btn:hover {
-            background-color: #d32f2f;
-        }
-        
-        .hidden {
-            display: none;
-        }
     </style>
 </head>
 <body>
-    <!-- Page d'accueil / Connexion -->
-    <div class="container" id="loginPage">
+    <div class="container">
         <img src="logo.png" alt="Logo du magasin" class="logo">
-        <h1>Gestion de Stock<br>Magasin Principal</h1>
-        
-        <div class="input-group">
-            <label for="accessCode">Code d'accès</label>
-            <input type="password" id="accessCode" placeholder="Entrez le code d'accès">
-        </div>
-        
-        <button id="loginBtn">Accéder</button>
-    </div>
-    
-    <!-- Page de sélection de rôle -->
-    <div class="container hidden" id="rolePage">
-        <img src="logo.png" alt="Logo du magasin" class="logo">
-        <h1>Sélectionnez votre rôle</h1>
-        
-        <div class="role-buttons">
-            <button class="admin-btn" id="adminBtn">Administrateur</button>
-            <button class="vendeur-btn" id="vendeurBtn">Vendeur</button>
-        </div>
-        
-        <button class="back-btn" id="backToLogin1">Retour</button>
-    </div>
-    
-    <!-- Tableau de bord Admin -->
-    <div class="container hidden" id="adminDashboard">
-        <img src="logo.png" alt="Logo du magasin" class="logo">
-        <h1>Espace Administrateur</h1>
+        <h1>Gestion de Stock - Espace Vendeur</h1>
         
         <div class="menu">
-            <div class="menu-item" id="adminStock">
-                <h3>Marchandises</h3>
-                <p>Gestion du stock</p>
+            <div class="menu-item" id="btnEntree">
+                <h3>Entrée Marchandises</h3>
+                <p>Enregistrer de nouveaux produits</p>
             </div>
-            <div class="menu-item" id="adminReports">
-                <h3>Rapports</h3>
-                <p>Dépenses et statistiques</p>
-            </div>
-            <div class="menu-item" id="adminEntries">
-                <h3>Créer Entrée</h3>
-                <p>Ajouter des produits</p>
-            </div>
-            <div class="menu-item" id="adminExits">
-                <h3>Créer Sortie</h3>
-                <p>Sortie de produits</p>
-            </div>
-        </div>
-        
-        <button class="back-btn" id="backToRole1">Retour</button>
-    </div>
-    
-    <!-- Tableau de bord Vendeur -->
-    <div class="container hidden" id="vendeurDashboard">
-        <img src="logo.png" alt="Logo du magasin" class="logo">
-        <h1>Espace Vendeur</h1>
-        
-        <div class="menu">
-            <div class="menu-item" id="vendeurScan">
-                <h3>Scan code-barres</h3>
+            <div class="menu-item" id="btnScanner">
+                <h3>Scanner Code-Barres</h3>
                 <p>Scanner des produits</p>
             </div>
-            <div class="menu-item" id="vendeurHelp">
+            <div class="menu-item" id="btnStock">
+                <h3>Voir le Stock</h3>
+                <p>Liste des produits disponibles</p>
+            </div>
+            <div class="menu-item" id="btnAide">
                 <h3>Besoin d'aide ?</h3>
                 <p>Support technique</p>
             </div>
         </div>
         
-        <button class="back-btn" id="backToRole2">Retour</button>
-    </div>
-
-    <script>
-        // Éléments DOM
-        const loginPage = document.getElementById('loginPage');
-        const rolePage = document.getElementById('rolePage');
-        const adminDashboard = document.getElementById('adminDashboard');
-        const vendeurDashboard = document.getElementById('vendeurDashboard');
-        const accessCodeInput = document.getElementById('accessCode');
-        const loginBtn = document.getElementById('loginBtn');
-        const adminBtn = document.getElementById('adminBtn');
-        const vendeurBtn = document.getElementById('vendeurBtn');
-        const backToLogin1 = document.getElementById('backToLogin1');
-        const backToRole1 = document.getElementById('backToRole1');
-        const backToRole2 = document.getElementById('backToRole2');
+        <!-- Section Entrée Marchandises -->
+        <div id="sectionEntree" class="section">
+            <h2>Entrée de Marchandises</h2>
+            <form id="formEntree">
+                <div class="form-group">
+                    <label for="codeProduit">Code Produit</label>
+                    <input type="text" id="codeProduit" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="nomProduit">Nom du Produit</label>
+                    <input type="text" id="nomProduit" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="quantite">Quantité</label>
+                    <input type="number" id="quantite" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="fournisseur">Fournisseur</label>
+                    <input type="text" id="fournisseur">
+                </div>
+                
+                <button type="submit">Enregistrer</button>
+            </form>
+        </div>
         
-        // Code d'accès valide
-        const VALID_CODE = "16181694y";
+        <!-- Section Scanner -->
+        <div id="sectionScanner" class="section">
+            <h2>Scanner Code-Barres</h2>
+            <div class="scanner-container">
+                <video id="video" playsinline></video>
+                <canvas id="canvas"></canvas>
+                <p id="scanMessage">Initialisation du scanner...</p>
+            </div>
+            <div class="scan-result" id="scanResult">
+                Aucun code scanné pour le moment
+            </div>
+            <button id="startScanner">Démarrer le Scanner</button>
+            <button id="stopScanner" style="display:none;">Arrêter le Scanner</button>
+        </div>
         
-        // Gestionnaires d'événements
-        loginBtn.addEventListener('click', () => {
-            if (accessCodeInput.value === VALID_CODE) {
-                loginPage.classList.add('hidden');
-                rolePage.classList.remove('hidden');
-                accessCodeInput.value = "";
-            } else {
-                alert("Code incorrect. Veuillez réessayer.");
-            }
-        });
-        
-        adminBtn.addEventListener('click', () => {
-            rolePage.classList.add('hidden');
-            adminDashboard.classList.remove('hidden');
-        });
-        
-        vendeurBtn.addEventListener('click', () => {
-            rolePage.classList.add('hidden');
-            vendeurDashboard.classList.remove('hidden');
-        });
-        
-        backToLogin1.addEventListener('click', () => {
-            rolePage.classList.add('hidden');
-            loginPage.classList.remove('hidden');
-        });
-        
-        backToRole1.addEventListener('click', () => {
-            adminDashboard.classList.add('hidden');
-            rolePage.classList.remove('hidden');
-        });
-        
-        backToRole2.addEventListener('click', () => {
-            vendeurDashboard.classList.add('hidden');
-            rolePage.classList.remove('hidden');
-        });
-        
-        // Fonctionnalités Admin
-        document.getElementById('adminStock').addEventListener('click', () => {
-            alert("Affichage des marchandises en stock...");
-            // Ici vous intégrerez la connexion à votre base de données
-        });
-        
-        document.getElementById('adminReports').addEventListener('click', () => {
-            alert("Affichage des rapports de dépenses...");
-            // Ici vous intégrerez la connexion à votre base de données
-        });
-        
-        document.getElementById('adminEntries').addEventListener('click', () => {
-            alert("Création d'une entrée de stock...");
-            // Ici vous intégrerez la connexion à votre base de données
-        });
-        
-        document.getElementById('adminExits').addEventListener('click', () => {
-            alert("Création d'une sortie de stock...");
-            // Ici vous intégrerez la connexion à votre base de données
-        });
-        
-        // Fonctionnalités Vendeur
-        document.getElementById('vendeurScan').addEventListener('click', () => {
-            alert("Lancement du scanner code-barres...");
-            // Ici vous pourriez intégrer un scanner réel
-        });
-        
-        document.getElementById('vendeurHelp').addEventListener('click', () => {
-            alert("Contactez le support technique au 01 23 45 67 89");
-        });
-        
-        // Permettre la connexion avec la touche Entrée
-        accessCodeInput.addEventListener('keypress', (e) => {
-            if (e.key === 'Enter') {
-                loginBtn.click();
-            }
-        });
-    </script>
-</body>
-</html>
+        <!-- Section Stock -->
+        <div id="sectionStock" class="section">
+            <h2>Inventaire du Stock</h2>
+            <table id="tableStock">
+                <thead>
+                    <tr>
+                        <th>Code Produit</th>
+                        <th>Nom</
