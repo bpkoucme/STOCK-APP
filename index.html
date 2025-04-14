@@ -3,232 +3,114 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion de Stock - Magasin Principal</title>
+    <title>BON PRIX KOUCMÉ - Gestionnaire de Stock</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             margin: 0;
             padding: 0;
-            background-color: #f5f5f5;
-        }
-        
-        .container {
-            background: white;
-            border-radius: 10px;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
-            padding: 30px;
-            width: 90%;
-            max-width: 1000px;
-            margin: 20px auto;
-        }
-        
-        .logo {
-            width: 150px;
-            display: block;
-            margin: 0 auto 20px;
-        }
-        
-        h1 {
-            color: #333;
+            background: #f8f9fa;
             text-align: center;
-            margin-bottom: 30px;
         }
-        
-        .menu {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            margin-top: 30px;
-        }
-        
-        .menu-item {
-            background: white;
-            border: 1px solid #ddd;
-            border-radius: 8px;
+        header {
+            background: #007bff;
+            color: white;
             padding: 20px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s;
-        }
-        
-        .menu-item:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
-        }
-        
-        .section {
-            display: none;
-            margin-top: 30px;
-            animation: fadeIn 0.5s;
-        }
-        
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        
-        .active {
-            display: block;
-        }
-        
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin-top: 20px;
-        }
-        
-        th, td {
-            border: 1px solid #ddd;
-            padding: 12px;
-            text-align: left;
-        }
-        
-        th {
-            background-color: #f2f2f2;
-        }
-        
-        .form-group {
-            margin-bottom: 15px;
-        }
-        
-        label {
-            display: block;
-            margin-bottom: 5px;
+            font-size: 24px;
             font-weight: bold;
         }
-        
-        input, select {
-            width: 100%;
-            padding: 10px;
-            border: 1px solid #ddd;
-            border-radius: 5px;
-            box-sizing: border-box;
+        .container {
+            margin-top: 50px;
         }
-        
-        button {
-            background-color: #4CAF50;
-            color: white;
+        .btn {
+            background: #007bff;
             border: none;
-            padding: 12px 20px;
-            border-radius: 5px;
+            color: white;
+            padding: 15px 30px;
+            margin: 10px;
+            font-size: 18px;
+            border-radius: 8px;
             cursor: pointer;
-            font-size: 16px;
-            margin-top: 10px;
-            transition: background 0.3s;
         }
-        
-        button:hover {
-            background-color: #45a049;
+        .btn:hover {
+            background: #0056b3;
         }
-        
-        .scanner-container {
-            width: 100%;
-            height: 300px;
-            background: #f9f9f9;
-            border: 2px dashed #ccc;
-            margin: 20px 0;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            position: relative;
-            overflow: hidden;
-        }
-        
-        #video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
-        #canvas {
-            display: none;
-        }
-        
-        .scan-result {
-            margin-top: 20px;
+        .log {
+            margin-top: 30px;
             padding: 15px;
-            background: #f0f0f0;
-            border-radius: 5px;
-        }
-        
-        .back-btn {
-            background-color: #f44336;
-            margin-top: 20px;
+            background: white;
+            border: 1px solid #ccc;
+            display: inline-block;
+            max-width: 90%;
+            word-break: break-word;
         }
     </style>
 </head>
 <body>
+    <header>BON PRIX KOUCMÉ - Gestionnaire de Stock</header>
+
     <div class="container">
-        <img src="logo.png" alt="Logo du magasin" class="logo">
-        <h1>Gestion de Stock - Espace Vendeur</h1>
-        
-        <div class="menu">
-            <div class="menu-item" id="btnEntree">
-                <h3>Entrée Marchandises</h3>
-                <p>Enregistrer de nouveaux produits</p>
-            </div>
-            <div class="menu-item" id="btnScanner">
-                <h3>Scanner Code-Barres</h3>
-                <p>Scanner des produits</p>
-            </div>
-            <div class="menu-item" id="btnStock">
-                <h3>Voir le Stock</h3>
-                <p>Liste des produits disponibles</p>
-            </div>
-            <div class="menu-item" id="btnAide">
-                <h3>Besoin d'aide ?</h3>
-                <p>Support technique</p>
-            </div>
-        </div>
-        
-        <!-- Section Entrée Marchandises -->
-        <div id="sectionEntree" class="section">
-            <h2>Entrée de Marchandises</h2>
-            <form id="formEntree">
-                <div class="form-group">
-                    <label for="codeProduit">Code Produit</label>
-                    <input type="text" id="codeProduit" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="nomProduit">Nom du Produit</label>
-                    <input type="text" id="nomProduit" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="quantite">Quantité</label>
-                    <input type="number" id="quantite" required>
-                </div>
-                
-                <div class="form-group">
-                    <label for="fournisseur">Fournisseur</label>
-                    <input type="text" id="fournisseur">
-                </div>
-                
-                <button type="submit">Enregistrer</button>
-            </form>
-        </div>
-        
-        <!-- Section Scanner -->
-        <div id="sectionScanner" class="section">
-            <h2>Scanner Code-Barres</h2>
-            <div class="scanner-container">
-                <video id="video" playsinline></video>
-                <canvas id="canvas"></canvas>
-                <p id="scanMessage">Initialisation du scanner...</p>
-            </div>
-            <div class="scan-result" id="scanResult">
-                Aucun code scanné pour le moment
-            </div>
-            <button id="startScanner">Démarrer le Scanner</button>
-            <button id="stopScanner" style="display:none;">Arrêter le Scanner</button>
-        </div>
-        
-        <!-- Section Stock -->
-        <div id="sectionStock" class="section">
-            <h2>Inventaire du Stock</h2>
-            <table id="tableStock">
-                <thead>
-                    <tr>
-                        <th>Code Produit</th>
-                        <th>Nom</
+        <button class="btn" onclick="gererEntree()">Entrée</button>
+        <button class="btn" onclick="gererSortie()">Sortie</button>
+        <button class="btn" onclick="scannerCode()">Scanner</button>
+        <button class="btn" onclick="voirRapport()">Rapport</button>
+
+        <div class="log" id="log">Action en attente...</div>
+    </div>
+
+    <!-- Intégration Firebase -->
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
+        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+
+        const firebaseConfig = {
+            apiKey: "AIzaSyBOFN1uxZKtcVc_kstMe1mHoaFY9CNS3uA",
+            authDomain: "monstockapp-73c82.firebaseapp.com",
+            projectId: "monstockapp-73c82",
+            storageBucket: "monstockapp-73c82.appspot.com",
+            messagingSenderId: "903263639703",
+            appId: "1:903263639703:web:ff08550aa21db9c25231d2"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const db = getFirestore(app);
+
+        async function gererEntree() {
+            const data = {
+                type: "entrée",
+                produit: "Marchandise ajoutée",
+                date: serverTimestamp()
+            };
+            await addDoc(collection(db, "stocks"), data);
+            document.getElementById('log').innerText = "Produit enregistré comme entrée !";
+        }
+
+        async function gererSortie() {
+            const data = {
+                type: "sortie",
+                produit: "Marchandise vendue",
+                date: serverTimestamp()
+            };
+            await addDoc(collection(db, "stocks"), data);
+            document.getElementById('log').innerText = "Produit marqué comme vendu !";
+        }
+
+        async function scannerCode() {
+            const code = prompt("Scanner ou entrer le code du produit :");
+            if (code) {
+                const data = {
+                    type: "scan",
+                    code: code,
+                    date: serverTimestamp()
+                };
+                await addDoc(collection(db, "stocks"), data);
+                document.getElementById('log').innerText = `Code ${code} scanné et enregistré.`;
+            }
+        }
+
+        function voirRapport() {
+            window.open("https://console.firebase.google.com/project/monstockapp-73c82/firestore/data/~2Fstocks", "_blank");
+        }
+    </script>
+</body>
+</html>
