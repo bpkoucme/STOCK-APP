@@ -1,115 +1,81 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Gestionnaire de Stocks</title>
-  <style>
-    body {
-      font-family: Arial, sans-serif;
-      background: #f4f4f4;
-      text-align: center;
-      margin: 0;
-      padding: 20px;
-    }
-    header img {
-      max-width: 150px;
-      margin-bottom: 10px;
-    }
-    .hidden { display: none; }
-    .role-buttons button, .action-buttons button {
-      padding: 15px 25px;
-      margin: 10px;
-      font-size: 18px;
-      cursor: pointer;
-      border: none;
-      border-radius: 8px;
-      background-color: #007bff;
-      color: white;
-      transition: background 0.3s;
-    }
-    .role-buttons button:hover, .action-buttons button:hover {
-      background-color: #0056b3;
-    }
-  </style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestionnaire de Stocks</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+            background: #f4f4f4;
+        }
+        header img {
+            width: 150px;
+        }
+        h1 {
+            margin: 20px 0;
+        }
+        .buttons {
+            display: flex;
+            flex-direction: column;
+            gap: 15px;
+            margin: 20px 0;
+        }
+        button {
+            padding: 15px 25px;
+            border: none;
+            background-color: #007BFF;
+            color: white;
+            font-size: 16px;
+            cursor: pointer;
+            border-radius: 8px;
+            transition: background 0.3s;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+    </style>
 </head>
 <body>
-  <header>
-    <img src="logo.png" alt="Logo du magasin">
-    <h1>Gestionnaire de Stocks</h1>
-  </header>
 
-  <div id="loginSection">
-    <p>Appuyez sur "Entrer le code secret" pour accéder</p>
-    <button onclick="showCodeInput()">Entrer le code secret</button>
-  </div>
+<header>
+    <img src="logo.png" alt="Logo de l'entreprise">
+</header>
+<h1>Gestionnaire de Stocks</h1>
+<div class="buttons">
+    <button onclick="gererEntree()">Entrée</button>
+    <button onclick="gererSortie()">Sortie</button>
+    <button onclick="scannerCodeBarre()">Scanner Code-Barres</button>
+    <button onclick="voirRapport()">Rapport</button>
+</div>
 
-  <div id="codeSection" class="hidden">
-    <input type="text" id="codeInput" placeholder="Entrez le code secret">
-    <button onclick="validateCode()">Valider</button>
-  </div>
-
-  <div id="roleSelection" class="hidden">
-    <p>Choisissez votre rôle :</p>
-    <div class="role-buttons">
-      <button onclick="loadVendorInterface()">Vendeur</button>
-      <button onclick="loadAdminInterface()">Administrateur</button>
-    </div>
-  </div>
-
-  <div id="vendorInterface" class="hidden">
-    <h2>Interface Vendeur</h2>
-    <div class="action-buttons">
-      <button>Entrée</button>
-      <button>Sortie</button>
-      <button>Scanner Code-Barres</button>
-      <button>Rapport</button>
-    </div>
-  </div>
-
-  <div id="adminInterface" class="hidden">
-    <h2>Interface Administrateur</h2>
-    <div class="action-buttons">
-      <button>Tout voir</button>
-      <button>Dépenses</button>
-      <button>Rapports</button>
-    </div>
-  </div>
-
-  <script>
-    const codeSecret = "16181694y";
-
-    function showCodeInput() {
-      document.getElementById("loginSection").classList.add("hidden");
-      document.getElementById("codeSection").classList.remove("hidden");
+<script>
+    function gererEntree() {
+        alert("Section Entrée : Enregistrer un nouveau stock.");
+        // Ici tu peux ajouter la logique d'enregistrement vers Firebase
     }
 
-    function validateCode() {
-      let code = document.getElementById("codeInput").value;
-      if (code === codeSecret) {
-        document.getElementById("codeSection").classList.add("hidden");
-        document.getElementById("roleSelection").classList.remove("hidden");
-      } else {
-        alert("Code incorrect !");
-      }
+    function gererSortie() {
+        alert("Section Sortie : Déduire du stock.");
+        // Ici tu peux ajouter la logique de déduction de stock vers Firebase
     }
 
-    function loadVendorInterface() {
-      document.getElementById("roleSelection").classList.add("hidden");
-      document.getElementById("vendorInterface").classList.remove("hidden");
+    function scannerCodeBarre() {
+        alert("Scanner de Code-Barres lancé.");
+        // Ici tu pourrais intégrer un scanner réel (ex: QuaggaJS ou l'API Web)
     }
 
-    function loadAdminInterface() {
-      document.getElementById("roleSelection").classList.add("hidden");
-      document.getElementById("adminInterface").classList.remove("hidden");
+    function voirRapport() {
+        alert("Affichage des rapports de stock.");
+        // Ici tu pourrais rediriger ou générer un tableau avec Firebase
     }
+</script>
 
-    // Pour Ordinateur : CTRL + O déclenche la demande de code
-    document.addEventListener("keydown", function(event) {
-      if (event.ctrlKey && event.key.toLowerCase() === "o") {
-        showCodeInput();
-      }
-    });
-  </script>
 </body>
 </html>
