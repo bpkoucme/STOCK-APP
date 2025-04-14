@@ -5,38 +5,33 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Gestionnaire de Stocks - BON PRIX KOUCMÉ</title>
     <link rel="stylesheet" href="style.css">
+
+    <!-- Firebase SDK -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 </head>
 <body>
+
     <header>
         <h1>BON PRIX KOUCMÉ - Gestionnaire de Stocks</h1>
     </header>
 
-    <div id="loginSection">
-        <h2>Entrer le Code d'Accès</h2>
-        <input type="password" id="accessCode" placeholder="Code...">
+    <section class="login">
+        <h2>Connexion</h2>
+        <input type="password" id="codeInput" placeholder="Entrez le code secret">
         <button onclick="checkCode()">Valider</button>
-    </div>
+    </section>
 
-    <div id="roleSelection" style="display:none;">
-        <h2>Choisir un Rôle</h2>
-        <button onclick="setRole('vendeur')">Vendeur</button>
-        <button onclick="setRole('admin')">Administrateur</button>
-    </div>
+    <section class="menu" style="display: none;">
+        <h2>Sélectionnez votre rôle</h2>
+        <button onclick="openPage('admin')">Admin</button>
+        <button onclick="openPage('vendeur')">Vendeur</button>
+    </section>
 
-    <div id="vendeurInterface" style="display:none;">
-        <h2>Interface Vendeur</h2>
-        <button onclick="ajouterProduit()">Entrée</button>
-        <button onclick="sortirProduit()">Sortie</button>
-        <button onclick="scannerProduit()">Scan</button>
-        <button onclick="genererRapport()">Rapport</button>
-    </div>
+    <section id="content" style="display: none;">
+        <!-- Le contenu spécifique (Admin ou Vendeur) sera affiché ici -->
+    </section>
 
-    <div id="adminInterface" style="display:none;">
-        <h2>Interface Administrateur</h2>
-        <div id="historique"></div>
-        <button onclick="voirDepenses()">Dépenses</button>
-    </div>
-
-    <script src="script.js" defer></script>
+    <script src="script.js"></script>
 </body>
 </html>
