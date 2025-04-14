@@ -3,93 +3,97 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestion de Stock - BON PRIX KOUCMÉ</title>
+    <title>Gestionnaire de Stocks - Bon Prix Koucmé</title>
     <style>
         body {
             font-family: Arial, sans-serif;
             text-align: center;
+            margin: 0;
             padding: 20px;
         }
         img {
-            max-width: 150px;
-            margin-bottom: 20px;
+            width: 150px;
+            margin: 20px auto;
         }
-        input, button {
-            padding: 10px;
-            margin: 5px;
+        .hidden { display: none; }
+        .btn {
+            display: inline-block;
+            padding: 10px 20px;
+            margin: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
         }
-        table {
-            width: 100%;
-            margin-top: 20px;
-            border-collapse: collapse;
-        }
-        th, td {
-            border: 1px solid #ddd;
-            padding: 10px;
-        }
+        .btn:hover { background-color: #0056b3; }
     </style>
 </head>
 <body>
+    <img src="logo.png" alt="Bon Prix Koucmé">
+    <h1>Gestionnaire de Stocks</h1>
 
-    <!-- Logo en haut -->
-    <img src="bonprix-logo.png" alt="BON PRIX KOUCMÉ">
+    <div id="access" class="">
+        <p>Appuyez sur CTRL + O pour entrer le code d'accès.</p>
+    </div>
 
-    <h1>Application de Gestion de Stock</h1>
+    <div id="role" class="hidden">
+        <p>Quel est votre rôle ? (vendeur / admin)</p>
+        <input type="text" id="roleInput" placeholder="Entrez votre rôle">
+        <button onclick="checkRole()" class="btn">Valider</button>
+    </div>
 
-    <input type="text" id="productName" placeholder="Nom du produit">
-    <input type="number" id="productQty" placeholder="Quantité">
-    <button onclick="addProduct()">Ajouter</button>
+    <div id="vendeurUI" class="hidden">
+        <h2>Interface Vendeur</h2>
+        <button class="btn">Entrée</button>
+        <button class="btn">Sortie</button>
+        <button class="btn">Scanner</button>
+        <button class="btn">Rapport</button>
+    </div>
 
-    <table>
-        <thead>
-            <tr>
-                <th>Produit</th>
-                <th>Quantité</th>
-            </tr>
-        </thead>
-        <tbody id="stockTable"></tbody>
-    </table>
+    <div id="adminUI" class="hidden">
+        <h2>Interface Administrateur</h2>
+        <button class="btn">Marchandises</button>
+        <button class="btn">Dépenses</button>
+        <button class="btn">Entrée</button>
+        <button class="btn">Sortie</button>
+        <button class="btn">Scanner</button>
+        <button class="btn">Rapport</button>
+    </div>
 
     <script>
-        let stock = [];
+        let codeOK = false;
 
-        function saveStock() {
-            localStorage.setItem('stock', JSON.stringify(stock));
-        }
+        document.addEventListener('keydown', function(e) {
+            if (e.ctrlKey && e.key === 'o') {
+                e.preventDefault();
+                let code = prompt("Entrez le code secret :");
+                if(code === "16181694y") {
+                    codeOK = true;
+                    document.getElementById("access").classList.add("hidden");
+                    document.getElementById("role").classList.remove("hidden");
+                } else {
+                    alert("Code incorrect !");
+                }
+            }
+        });
 
-        function loadStock() {
-            const saved = localStorage.getItem('stock');
-            if (saved) {
-                stock = JSON.parse(saved);
+        function checkRole() {
+            if (!codeOK) return;
+            let role = document.getElementById("roleInput").value.toLowerCase();
+
+            if(role === "vendeur") {
+                document.getElementById("role").classList.add("hidden");
+                document.getElementById("vendeurUI").classList.remove("hidden");
+            }
+            else if(role === "admin") {
+                document.getElementById("role").classList.add("hidden");
+                document.getElementById("adminUI").classList.remove("hidden");
+            }
+            else {
+                alert("Rôle non reconnu. Entrez 'vendeur' ou 'admin'.");
             }
         }
-
-        function renderStock() {
-            const table = document.getElementById('stockTable');
-            table.innerHTML = '';
-            stock.forEach(item => {
-                let row = `<tr><td>${item.name}</td><td>${item.qty}</td></tr>`;
-                table.innerHTML += row;
-            });
-        }
-
-        function addProduct() {
-            const name = document.getElementById('productName').value.trim();
-            const qty = parseInt(document.getElementById('productQty').value);
-            if (name && qty > 0) {
-                stock.push({ name, qty });
-                saveStock();
-                renderStock();
-                document.getElementById('productName').value = '';
-                document.getElementById('productQty').value = '';
-            } else {
-                alert('Entrez un nom de produit et une quantité valide.');
-            }
-        }
-
-        loadStock();
-        renderStock();
     </script>
-
 </body>
 </html>
