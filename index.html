@@ -3,114 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BON PRIX KOUCMÉ - Gestionnaire de Stock</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            background: #f8f9fa;
-            text-align: center;
-        }
-        header {
-            background: #007bff;
-            color: white;
-            padding: 20px;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .container {
-            margin-top: 50px;
-        }
-        .btn {
-            background: #007bff;
-            border: none;
-            color: white;
-            padding: 15px 30px;
-            margin: 10px;
-            font-size: 18px;
-            border-radius: 8px;
-            cursor: pointer;
-        }
-        .btn:hover {
-            background: #0056b3;
-        }
-        .log {
-            margin-top: 30px;
-            padding: 15px;
-            background: white;
-            border: 1px solid #ccc;
-            display: inline-block;
-            max-width: 90%;
-            word-break: break-word;
-        }
-    </style>
+    <title>Gestionnaire de Stocks - BON PRIX KOUCMÉ</title>
+    <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>BON PRIX KOUCMÉ - Gestionnaire de Stock</header>
+    <header>
+        <h1>BON PRIX KOUCMÉ - Gestionnaire de Stocks</h1>
+    </header>
 
-    <div class="container">
-        <button class="btn" onclick="gererEntree()">Entrée</button>
-        <button class="btn" onclick="gererSortie()">Sortie</button>
-        <button class="btn" onclick="scannerCode()">Scanner</button>
-        <button class="btn" onclick="voirRapport()">Rapport</button>
-
-        <div class="log" id="log">Action en attente...</div>
+    <div id="loginSection">
+        <h2>Entrer le Code d'Accès</h2>
+        <input type="password" id="accessCode" placeholder="Code...">
+        <button onclick="checkCode()">Valider</button>
     </div>
 
-    <!-- Intégration Firebase -->
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-app.js";
-        import { getFirestore, collection, addDoc, serverTimestamp } from "https://www.gstatic.com/firebasejs/10.12.0/firebase-firestore.js";
+    <div id="roleSelection" style="display:none;">
+        <h2>Choisir un Rôle</h2>
+        <button onclick="setRole('vendeur')">Vendeur</button>
+        <button onclick="setRole('admin')">Administrateur</button>
+    </div>
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyBOFN1uxZKtcVc_kstMe1mHoaFY9CNS3uA",
-            authDomain: "monstockapp-73c82.firebaseapp.com",
-            projectId: "monstockapp-73c82",
-            storageBucket: "monstockapp-73c82.appspot.com",
-            messagingSenderId: "903263639703",
-            appId: "1:903263639703:web:ff08550aa21db9c25231d2"
-        };
+    <div id="vendeurInterface" style="display:none;">
+        <h2>Interface Vendeur</h2>
+        <button onclick="ajouterProduit()">Entrée</button>
+        <button onclick="sortirProduit()">Sortie</button>
+        <button onclick="scannerProduit()">Scan</button>
+        <button onclick="genererRapport()">Rapport</button>
+    </div>
 
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
+    <div id="adminInterface" style="display:none;">
+        <h2>Interface Administrateur</h2>
+        <div id="historique"></div>
+        <button onclick="voirDepenses()">Dépenses</button>
+    </div>
 
-        async function gererEntree() {
-            const data = {
-                type: "entrée",
-                produit: "Marchandise ajoutée",
-                date: serverTimestamp()
-            };
-            await addDoc(collection(db, "stocks"), data);
-            document.getElementById('log').innerText = "Produit enregistré comme entrée !";
-        }
-
-        async function gererSortie() {
-            const data = {
-                type: "sortie",
-                produit: "Marchandise vendue",
-                date: serverTimestamp()
-            };
-            await addDoc(collection(db, "stocks"), data);
-            document.getElementById('log').innerText = "Produit marqué comme vendu !";
-        }
-
-        async function scannerCode() {
-            const code = prompt("Scanner ou entrer le code du produit :");
-            if (code) {
-                const data = {
-                    type: "scan",
-                    code: code,
-                    date: serverTimestamp()
-                };
-                await addDoc(collection(db, "stocks"), data);
-                document.getElementById('log').innerText = `Code ${code} scanné et enregistré.`;
-            }
-        }
-
-        function voirRapport() {
-            window.open("https://console.firebase.google.com/project/monstockapp-73c82/firestore/data/~2Fstocks", "_blank");
-        }
-    </script>
+    <script src="script.js" defer></script>
 </body>
 </html>
