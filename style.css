@@ -1,0 +1,80 @@
+/* Style général */
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Arial, sans-serif;
+    background-color: #f0f2f5;
+}
+
+/* En-tête avec le nom de l'entreprise */
+header {
+    background-color: #00796b;
+    color: white;
+    padding: 15px 0;
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+}
+
+/* Container des boutons */
+.container {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 20px auto;
+    max-width: 600px;
+}
+
+/* Style des boutons */
+button {
+    background-color: #00796b;
+    color: white;
+    border: none;
+    padding: 15px 30px;
+    margin: 10px;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.3s ease;
+}
+
+button:hover {
+    background-color: #004d40;
+}
+
+/* Boîte pour messages d'erreur ou alertes */
+.message {
+    text-align: center;
+    color: red;
+    margin-top: 20px;
+}
+
+/* Champs d'entrée */
+input[type="text"], input[type="number"], input[type="password"] {
+    width: 80%;
+    padding: 12px;
+    margin: 8px auto;
+    display: block;
+    border: 1px solid #ccc;
+    border-radius: 6px;
+}
+
+/* Tableau de stock (admin) */
+table {
+    width: 90%;
+    margin: 20px auto;
+    border-collapse: collapse;
+    background: white;
+}
+
+table th, table td {
+    border: 1px solid #ddd;
+    padding: 12px;
+    text-align: center;
+}
+
+table th {
+    background-color: #00796b;
+    color: white;
+}
