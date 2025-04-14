@@ -3,43 +3,45 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestionnaire de Stock - BON PRIX KOUCMÉ</title>
+    <title>Bon Prix Koucmé - Gestion de Stock</title>
+
+    <!-- Lien vers ton fichier CSS -->
     <link rel="stylesheet" href="style.css">
+
+    <!-- Firebase SDKs (obligatoire pour que firebase soit défini !) -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
     <header>
-        <h1>BON PRIX KOUCMÉ</h1>
+        <h1>Bon Prix Koucmé</h1>
+        <p>Application de Gestion de Stock</p>
     </header>
 
     <main>
-        <section id="login-section">
-            <h2>Connexion</h2>
-            <input type="password" id="accessCode" placeholder="Entrez le code d'accès">
-            <button onclick="checkAccessCode()">Valider</button>
+        <section class="form-section">
+            <h2>Entrée de Stock</h2>
+            <input type="text" id="product-name" placeholder="Nom du produit">
+            <input type="number" id="product-quantity" placeholder="Quantité">
+            <button onclick="addProduct()">Ajouter au Stock</button>
         </section>
 
-        <section id="role-selection" style="display:none;">
-            <h2>Choisissez votre rôle</h2>
-            <button onclick="selectRole('vendeur')">Vendeur</button>
-            <button onclick="selectRole('admin')">Administrateur</button>
+        <section class="form-section">
+            <h2>Sortie de Stock</h2>
+            <input type="text" id="product-name-out" placeholder="Nom du produit">
+            <input type="number" id="product-quantity-out" placeholder="Quantité à retirer">
+            <button onclick="removeProduct()">Retirer du Stock</button>
         </section>
 
-        <section id="vendeur-interface" style="display:none;">
-            <h2>Interface Vendeur</h2>
-            <button onclick="ajouterProduit()">Entrée</button>
-            <button onclick="sortirProduit()">Sortie</button>
-            <button onclick="scannerProduit()">Scan</button>
-            <button onclick="afficherRapport()">Rapport</button>
-        </section>
-
-        <section id="admin-interface" style="display:none;">
-            <h2>Interface Administrateur</h2>
-            <div id="stockDisplay"></div>
-            <button onclick="gererDepenses()">Dépenses</button>
+        <section class="stock-list">
+            <h2>Liste des Produits</h2>
+            <ul id="stock-display"></ul>
         </section>
     </main>
 
-    <script src="script.js"></script>
+    <!-- Ton script JavaScript -->
+    <script src="app.js"></script>
+
 </body>
 </html>
