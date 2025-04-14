@@ -6,76 +6,290 @@
     <title>Gestionnaire de Stocks</title>
     <style>
         body {
-            font-family: Arial, sans-serif;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
             display: flex;
             flex-direction: column;
             align-items: center;
             justify-content: center;
-            height: 100vh;
+            min-height: 100vh;
             margin: 0;
-            background: #f4f4f4;
+            background: #f0f2f5;
+            padding: 20px;
+            box-sizing: border-box;
         }
+        
+        header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
         header img {
             width: 150px;
+            height: auto;
+            margin-bottom: 15px;
         }
+        
         h1 {
-            margin: 20px 0;
+            margin: 0 0 30px 0;
+            color: #2c3e50;
+            font-size: 28px;
         }
+        
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+            width: 100%;
+            max-width: 500px;
+            text-align: center;
+        }
+        
         .buttons {
             display: flex;
             flex-direction: column;
             gap: 15px;
             margin: 20px 0;
         }
+        
         button {
             padding: 15px 25px;
             border: none;
-            background-color: #007BFF;
+            background-color: #3498db;
             color: white;
             font-size: 16px;
+            font-weight: 500;
             cursor: pointer;
             border-radius: 8px;
-            transition: background 0.3s;
+            transition: all 0.3s ease;
+            width: 100%;
         }
+        
         button:hover {
-            background-color: #0056b3;
+            background-color: #2980b9;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+        }
+        
+        .modal-content {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+        }
+        
+        .close-btn {
+            float: right;
+            font-size: 22px;
+            cursor: pointer;
+        }
+        
+        @media (max-width: 600px) {
+            .container {
+                padding: 20px;
+            }
+            
+            h1 {
+                font-size: 24px;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="container">
+        <header>
+            <img src="logo.png" alt="Logo de l'entreprise" id="logo">
+            <h1>Gestionnaire de Stocks</h1>
+        </header>
+        
+        <div class="buttons">
+            <button id="entreeBtn">Entrée</button>
+            <button id="sortieBtn">Sortie</button>
+            <button id="scannerBtn">Scanner Code-Barres</button>
+            <button id="rapportBtn">Rapport</button>
+        </div>
+    </div>
+    
+    <!-- Modal pour les différentes actions -->
+    <div class="modal" id="actionModal">
+        <div class="modal-content">
+            <span class="close-btn" id="closeModal">&times;</span>
+            <h2 id="modalTitle">Titre</h2>
+            <div id="modalContent">
+                <!-- Contenu dynamique -->
+            </div>
+        </div>
+    </div>
 
-<header>
-    <img src="logo.png" alt="Logo de l'entreprise">
-</header>
-<h1>Gestionnaire de Stocks</h1>
-<div class="buttons">
-    <button onclick="gererEntree()">Entrée</button>
-    <button onclick="gererSortie()">Sortie</button>
-    <button onclick="scannerCodeBarre()">Scanner Code-Barres</button>
-    <button onclick="voirRapport()">Rapport</button>
-</div>
-
-<script>
-    function gererEntree() {
-        alert("Section Entrée : Enregistrer un nouveau stock.");
-        // Ici tu peux ajouter la logique d'enregistrement vers Firebase
-    }
-
-    function gererSortie() {
-        alert("Section Sortie : Déduire du stock.");
-        // Ici tu peux ajouter la logique de déduction de stock vers Firebase
-    }
-
-    function scannerCodeBarre() {
-        alert("Scanner de Code-Barres lancé.");
-        // Ici tu pourrais intégrer un scanner réel (ex: QuaggaJS ou l'API Web)
-    }
-
-    function voirRapport() {
-        alert("Affichage des rapports de stock.");
-        // Ici tu pourrais rediriger ou générer un tableau avec Firebase
-    }
-</script>
-
+    <script>
+        // Récupération des éléments DOM
+        const entreeBtn = document.getElementById('entreeBtn');
+        const sortieBtn = document.getElementById('sortieBtn');
+        const scannerBtn = document.getElementById('scannerBtn');
+        const rapportBtn = document.getElementById('rapportBtn');
+        const actionModal = document.getElementById('actionModal');
+        const closeModal = document.getElementById('closeModal');
+        const modalTitle = document.getElementById('modalTitle');
+        const modalContent = document.getElementById('modalContent');
+        
+        // Gestion des événements
+        entreeBtn.addEventListener('click', gererEntree);
+        sortieBtn.addEventListener('click', gererSortie);
+        scannerBtn.addEventListener('click', scannerCodeBarre);
+        rapportBtn.addEventListener('click', voirRapport);
+        closeModal.addEventListener('click', fermerModal);
+        
+        // Fermer la modal si on clique en dehors
+        window.addEventListener('click', (event) => {
+            if (event.target === actionModal) {
+                fermerModal();
+            }
+        });
+        
+        // Fonctions principales
+        function gererEntree() {
+            modalTitle.textContent = "Gestion des Entrées";
+            modalContent.innerHTML = `
+                <form id="formEntree">
+                    <div style="margin-bottom: 15px;">
+                        <label for="produit" style="display: block; margin-bottom: 5px; text-align: left;">Produit:</label>
+                        <input type="text" id="produit" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="quantite" style="display: block; margin-bottom: 5px; text-align: left;">Quantité:</label>
+                        <input type="number" id="quantite" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="fournisseur" style="display: block; margin-bottom: 5px; text-align: left;">Fournisseur:</label>
+                        <input type="text" id="fournisseur" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <button type="submit" style="background-color: #2ecc71; margin-top: 10px;">Enregistrer</button>
+                </form>
+            `;
+            
+            document.getElementById('formEntree').addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Ici tu peux ajouter la logique Firebase
+                alert("Entrée enregistrée avec succès!");
+                fermerModal();
+            });
+            
+            ouvrirModal();
+        }
+        
+        function gererSortie() {
+            modalTitle.textContent = "Gestion des Sorties";
+            modalContent.innerHTML = `
+                <form id="formSortie">
+                    <div style="margin-bottom: 15px;">
+                        <label for="produitSortie" style="display: block; margin-bottom: 5px; text-align: left;">Produit:</label>
+                        <input type="text" id="produitSortie" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="quantiteSortie" style="display: block; margin-bottom: 5px; text-align: left;">Quantité:</label>
+                        <input type="number" id="quantiteSortie" required style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <div style="margin-bottom: 15px;">
+                        <label for="destination" style="display: block; margin-bottom: 5px; text-align: left;">Destination:</label>
+                        <input type="text" id="destination" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px;">
+                    </div>
+                    <button type="submit" style="background-color: #e74c3c; margin-top: 10px;">Enregistrer</button>
+                </form>
+            `;
+            
+            document.getElementById('formSortie').addEventListener('submit', (e) => {
+                e.preventDefault();
+                // Ici tu peux ajouter la logique Firebase
+                alert("Sortie enregistrée avec succès!");
+                fermerModal();
+            });
+            
+            ouvrirModal();
+        }
+        
+        function scannerCodeBarre() {
+            modalTitle.textContent = "Scanner un Code-Barres";
+            modalContent.innerHTML = `
+                <div style="text-align: center;">
+                    <div id="scanner-container" style="width: 100%; height: 300px; background: #f9f9f9; border: 2px dashed #ccc; display: flex; justify-content: center; align-items: center; margin-bottom: 20px;">
+                        <p>Zone de scan</p>
+                    </div>
+                    <p>Ou entrer manuellement le code:</p>
+                    <input type="text" placeholder="Code à barres" style="width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 4px; margin-bottom: 15px;">
+                    <button style="background-color: #9b59b6;">Valider</button>
+                </div>
+            `;
+            
+            ouvrirModal();
+            
+            // Ici tu pourrais intégrer un scanner réel (ex: QuaggaJS ou l'API Web)
+        }
+        
+        function voirRapport() {
+            modalTitle.textContent = "Rapport de Stock";
+            modalContent.innerHTML = `
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse;">
+                        <thead>
+                            <tr style="background-color: #3498db; color: white;">
+                                <th style="padding: 10px; text-align: left;">Produit</th>
+                                <th style="padding: 10px; text-align: left;">Quantité</th>
+                                <th style="padding: 10px; text-align: left;">Dernière Mise à jour</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 10px;">Produit A</td>
+                                <td style="padding: 10px;">150</td>
+                                <td style="padding: 10px;">15/04/2023</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 10px;">Produit B</td>
+                                <td style="padding: 10px;">75</td>
+                                <td style="padding: 10px;">14/04/2023</td>
+                            </tr>
+                            <tr style="border-bottom: 1px solid #ddd;">
+                                <td style="padding: 10px;">Produit C</td>
+                                <td style="padding: 10px;">42</td>
+                                <td style="padding: 10px;">13/04/2023</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <button style="margin-top: 20px; background-color: #f39c12;">Exporter en PDF</button>
+            `;
+            
+            ouvrirModal();
+            
+            // Ici tu pourrais récupérer les données depuis Firebase
+        }
+        
+        function ouvrirModal() {
+            actionModal.style.display = 'flex';
+        }
+        
+        function fermerModal() {
+            actionModal.style.display = 'none';
+        }
+    </script>
 </body>
 </html>
