@@ -3,34 +3,42 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Gestionnaire de Stocks - BON PRIX KOUCMÉ</title>
+    <title>Gestionnaire de Stock - BON PRIX KOUCMÉ</title>
     <link rel="stylesheet" href="style.css">
-
-    <!-- Firebase SDK -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.10/firebase-database.js"></script>
 </head>
 <body>
 
     <header>
-        <h1>BON PRIX KOUCMÉ - Gestionnaire de Stocks</h1>
+        <h1>BON PRIX KOUCMÉ</h1>
     </header>
 
-    <section class="login">
-        <h2>Connexion</h2>
-        <input type="password" id="codeInput" placeholder="Entrez le code secret">
-        <button onclick="checkCode()">Valider</button>
-    </section>
+    <main>
+        <section id="login-section">
+            <h2>Connexion</h2>
+            <input type="password" id="accessCode" placeholder="Entrez le code d'accès">
+            <button onclick="checkAccessCode()">Valider</button>
+        </section>
 
-    <section class="menu" style="display: none;">
-        <h2>Sélectionnez votre rôle</h2>
-        <button onclick="openPage('admin')">Admin</button>
-        <button onclick="openPage('vendeur')">Vendeur</button>
-    </section>
+        <section id="role-selection" style="display:none;">
+            <h2>Choisissez votre rôle</h2>
+            <button onclick="selectRole('vendeur')">Vendeur</button>
+            <button onclick="selectRole('admin')">Administrateur</button>
+        </section>
 
-    <section id="content" style="display: none;">
-        <!-- Le contenu spécifique (Admin ou Vendeur) sera affiché ici -->
-    </section>
+        <section id="vendeur-interface" style="display:none;">
+            <h2>Interface Vendeur</h2>
+            <button onclick="ajouterProduit()">Entrée</button>
+            <button onclick="sortirProduit()">Sortie</button>
+            <button onclick="scannerProduit()">Scan</button>
+            <button onclick="afficherRapport()">Rapport</button>
+        </section>
+
+        <section id="admin-interface" style="display:none;">
+            <h2>Interface Administrateur</h2>
+            <div id="stockDisplay"></div>
+            <button onclick="gererDepenses()">Dépenses</button>
+        </section>
+    </main>
 
     <script src="script.js"></script>
 </body>
