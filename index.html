@@ -3,28 +3,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>BON PRIX KOUCMÉ — Gestion Pro</title>
+    <title>Vendeur - Gestion de Stock</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <header>
         <h1>BON PRIX KOUCMÉ</h1>
-        <p>Application de Gestion — Alimentation | Téléphones | Cyber</p>
     </header>
 
-    <section class="menu">
-        <button onclick="ouvrirSection('entree')">Entrée Stock</button>
-        <button onclick="ouvrirSection('sortie')">Sortie / Vente</button>
-        <button onclick="ouvrirSection('transfert')">Transfert</button>
-        <button onclick="ouvrirSection('rapport')">Rapport</button>
-        <button onclick="ouvrirSection('depenses')">Dépenses</button>
-    </section>
+    <main>
+        <section class="actions">
+            <button id="btnEntree">Entrée Stock</button>
+            <button id="btnSortie">Sortie Stock</button>
+            <button id="btnScan">Scanner Code</button>
+            <button id="btnRapport">Voir Rapport</button>
+        </section>
 
-    <section id="contenu"></section>
+        <section id="formSection" style="display:none;">
+            <h2 id="formTitle"></h2>
+            <input type="text" id="productCode" placeholder="Code du produit">
+            <input type="number" id="productQuantity" placeholder="Quantité">
+            <button id="btnValider">Valider</button>
+        </section>
 
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
+        <section id="rapportSection" style="display:none;">
+            <h2>Rapport</h2>
+            <ul id="rapportList"></ul>
+        </section>
+    </main>
+
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
     <script src="app.js"></script>
 </body>
 </html>
