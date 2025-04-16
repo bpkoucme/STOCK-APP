@@ -3,45 +3,28 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Bon Prix Koucmé - Gestion de Stock</title>
-
-    <!-- Lien vers ton fichier CSS -->
+    <title>BON PRIX KOUCMÉ — Gestion Pro</title>
     <link rel="stylesheet" href="style.css">
-
-    <!-- Firebase SDKs (obligatoire pour que firebase soit défini !) -->
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore-compat.js"></script>
 </head>
 <body>
 
     <header>
-        <h1>Bon Prix Koucmé</h1>
-        <p>Application de Gestion de Stock</p>
+        <h1>BON PRIX KOUCMÉ</h1>
+        <p>Application de Gestion — Alimentation | Téléphones | Cyber</p>
     </header>
 
-    <main>
-        <section class="form-section">
-            <h2>Entrée de Stock</h2>
-            <input type="text" id="product-name" placeholder="Nom du produit">
-            <input type="number" id="product-quantity" placeholder="Quantité">
-            <button onclick="addProduct()">Ajouter au Stock</button>
-        </section>
+    <section class="menu">
+        <button onclick="ouvrirSection('entree')">Entrée Stock</button>
+        <button onclick="ouvrirSection('sortie')">Sortie / Vente</button>
+        <button onclick="ouvrirSection('transfert')">Transfert</button>
+        <button onclick="ouvrirSection('rapport')">Rapport</button>
+        <button onclick="ouvrirSection('depenses')">Dépenses</button>
+    </section>
 
-        <section class="form-section">
-            <h2>Sortie de Stock</h2>
-            <input type="text" id="product-name-out" placeholder="Nom du produit">
-            <input type="number" id="product-quantity-out" placeholder="Quantité à retirer">
-            <button onclick="removeProduct()">Retirer du Stock</button>
-        </section>
+    <section id="contenu"></section>
 
-        <section class="stock-list">
-            <h2>Liste des Produits</h2>
-            <ul id="stock-display"></ul>
-        </section>
-    </main>
-
-    <!-- Ton script JavaScript -->
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js"></script>
     <script src="app.js"></script>
-
 </body>
 </html>
