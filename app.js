@@ -1,34 +1,94 @@
-// Connexion à ta base Firebase
+// Configuration Firebase (ta config)
 const firebaseConfig = {
-  apiKey: "AIzaSyB0FN1uxZKtcVc_kstMe1mHoaFY9CNS3uA",
-  authDomain: "monstockapp-73c82.firebaseapp.com",
-  projectId: "monstockapp-73c82",
-  storageBucket: "monstockapp-73c82.appspot.com",
-  messagingSenderId: "903263639703",
-  appId: "1:903263639703:web:ff08550aa21db9c25231d2"
+    apiKey: "AIzaSyD3-7...",  // remplace ici avec ta clé
+    authDomain: "ton-projet.firebaseapp.com",
+    databaseURL: "https://ton-projet.firebaseio.com",
+    projectId: "ton-projet",
+    storageBucket: "ton-projet.appspot.com",
+    messagingSenderId: "000000000",
+    appId: "1:000000000:web:abcdef"
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
+const db = firebase.database();
 
-// Gestion des boutons
-function ouvrirSection(nom) {
-    let contenu = document.getElementById("contenu");
-    switch(nom) {
-        case 'entree':
-            contenu.innerHTML = "<h2>Entrée de Stock</h2><p>Scanner ou saisir un produit pour l’ajouter.</p>";
-            break;
-        case 'sortie':
-            contenu.innerHTML = "<h2>Sortie / Vente</h2><p>Scanner le produit vendu pour l’enregistrer.</p>";
-            break;
-        case 'transfert':
-            contenu.innerHTML = "<h2>Transfert</h2><p>Gérez vos transferts entre dépôts.</p>";
-            break;
-        case 'rapport':
-            contenu.innerHTML = "<h2>Rapport</h2><p>Consultez vos rapports d’activité.</p>";
-            break;
-        case 'depenses':
-            contenu.innerHTML = "<h2>Dépenses</h2><p>Enregistrez les dépenses de l’entreprise.</p>";
-            break;
+const btnEntree = document.getElementById("btnEntree");
+const btnSortie = document.getElementById("btnSortie");
+const btnScan = document.getElementById("btnScan");
+const btnRapport = document.getElementById("btnRapport");
+const formSection = document.getElementById("formSection");
+const rapportSection = document.getElementById("rapportSection");
+const formTitle = document.getElementById("formTitle");
+const productCode = document.getElementById("productCode");
+const productQuantity = document.getElementById("productQuantity");
+const btnValider = document.getElementById("btnValider");
+const rapportList = document.getElementById("rapportList");
+
+let currentAction = "";
+
+btnEntree.onclick = () => {
+    formSection.style.display = "block";
+    rapportSection.style.display = "none";
+    formTitle.innerText = "Entrée de Stock";
+    currentAction = "entree";
+};
+
+btnSortie.onclick = () => {
+    formSection.style.display = "block";
+    rapportSection.style.display = "none";
+    formTitle.innerText = "Sortie de Stock";
+    currentAction = "sortie";
+};
+
+btnScan.onclick = () => {
+    formSection.style.display = "block";
+    rapportSection.style.display = "none";
+    formTitle.innerText = "Scanner Code";
+    currentAction = "scan";
+};
+
+btnRapport.onclick = () => {
+    formSection.style.display = "none";
+    rapportSection.style.display = "block";
+    afficherRapport();
+};
+
+btnValider.onclick = () => {
+    const code = productCode.value.trim();
+    const quantite = parseInt(productQuantity.value.trim());
+
+    if (!code || isNaN(quantite)) {
+        alert("Remplis bien tous les champs!");
+        return;
     }
+
+    const timestamp = Date.now();
+    const data = {
+        code,
+        quantite,
+        action: currentAction,
+        date: new Date().toLocaleString()
+    };
+
+    db.ref("stocks/" + timestamp).set(data).then(() => {
+        alert("Enregistré avec succès!");
+        productCode.value = "";
+        productQuantity.value = "";
+        formSection.style.display = "none";
+    }).catch(error => {
+        alert("Erreur : " + error.message);
+    });
+};
+
+function afficherRapport() {
+    rapportList.innerHTML = "Chargement...";
+    db.ref("stocks").once("value").then(snapshot => {
+        rapportList.innerHTML = "";
+        snapshot.forEach(child => {
+            const item = child.val();
+            const li = document.createElement("li");
+            li.textContent = `[${item.date}] ${item.action} - ${item.code} : ${item.quantite}`;
+            rapportList.appendChild(li);
+        });
+    });
 }
