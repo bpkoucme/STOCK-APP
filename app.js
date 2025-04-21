@@ -1,71 +1,135 @@
-// Configuration Firebase
+// Configuration Firebase (ta config ici)
 const firebaseConfig = {
-    apiKey: "AIzaSyBOFN1uxZKtcVc_kstMe1mHoaFY9CNS3uA",
-    authDomain: "monstockapp-73c82.firebaseapp.com",
-    databaseURL: "https://monstockapp-73c82-default-rtdb.firebaseio.com",
-    projectId: "monstockapp-73c82",
-    storageBucket: "monstockapp-73c82.appspot.com",
-    messagingSenderId: "903263639703",
-    appId: "1:903263639703:web:ff08550aa21db9c25231d2"
+  apiKey: "AIzaSyBOFN1uxZKtcVc_kstMe1mHoaFY9CNS3uA",
+  authDomain: "monstockapp-73c82.firebaseapp.com",
+  projectId: "monstockapp-73c82",
+  storageBucket: "monstockapp-73c82.appspot.com",
+  messagingSenderId: "903263639703",
+  appId: "1:903263639703:web:ff08550aa21db9c25231d2"
 };
 
+// Initialisation Firebase
 firebase.initializeApp(firebaseConfig);
-const db = firebase.database();
+const database = firebase.database();
 
-function loadProducts() {
-    const productSection = document.getElementById("products");
-    db.ref("products").on("value", snapshot => {
-        productSection.innerHTML = "";
-        snapshot.forEach(child => {
-            const product = child.val();
-            const div = document.createElement("div");
-            div.className = "product-item";
-            div.innerHTML = `
-                <img src="${product.image}" alt="${product.name}">
-                <h3>${product.name}</h3>
-                <p>${product.category}</p>
-                <strong>${product.price} Fcfa</strong><br>
-                <button onclick="openOrderForm('${child.key}')">Commander</button>
-            `;
-            productSection.appendChild(div);
-        });
+let cart = [];
+
+// Affiche les produits depuis Firebase
+function displayProducts() {
+  firebase.database().ref('produits').once('value', (snapshot) => {
+    const list = document.getElementById("productList");
+    list.innerHTML = "";
+    const products = snapshot.val() || {};
+
+    Object.keys(products).forEach((key) => {
+      const p = products[key];
+      const div = document.createElement("div");
+      div.className = "product-card";
+      div.innerHTML = `
+        <img src="${p.image}" alt="Produit">
+        <h3>${p.name}</h3>
+        <p>${p.price} CFA</p>
+        <button class="cart-button" onclick="addToCart('${key}')">Ajouter au panier</button>
+      `;
+      list.appendChild(div);
     });
+  });
 }
 
-let selectedProductId = null;
-
-function openOrderForm(productId) {
-    selectedProductId = productId;
-    document.getElementById("orderForm").style.display = "block";
+function addToCart(productKey) {
+  firebase.database().ref('produits/' + productKey).once('value', (snapshot) => {
+    cart.push(snapshot.val());
+    document.getElementById("cartCount").innerText = cart.length;
+    document.getElementById("cartButton").classList.remove("hidden");
+  });
 }
 
-function submitOrder() {
-    const name = document.getElementById("customerName").value.trim();
-    const phone = document.getElementById("customerPhone").value.trim();
-    const address = document.getElementById("customerAddress").value.trim();
+function addProduct() {
+  const name = document.getElementById("productName").value;
+  const price = document.getElementById("productPrice").value;
+  const imageInput = document.getElementById("productImage");
+  let image = "placeholder.jpg";
 
-    if (!name || !phone || !address || !selectedProductId) {
-        alert("Veuillez remplir tous les champs.");
-        return;
-    }
+  if (name === "" || price === "") {
+    alert("Veuillez remplir tous les champs.");
+    return;
+  }
 
-    const order = {
-        name,
-        phone,
-        address,
-        productId: selectedProductId,
-        date: new Date().toLocaleString()
+  if (imageInput.files.length > 0) {
+    const reader = new FileReader();
+    reader.onload = function(e) {
+      image = e.target.result;
+      saveProduct(name, price, image);
     };
-
-    db.ref("orders").push(order, error => {
-        if (error) {
-            alert("Erreur lors de l'envoi !");
-        } else {
-            alert("Commande envoyée avec succès !");
-            document.getElementById("orderForm").style.display = "none";
-            document.getElementById("customerName").value = "";
-            document.getElementById("customerPhone").value = "";
-            document.getElementById("customerAddress").value = "";
-        }
-    });
+    reader.readAsDataURL(imageInput.files[0]);
+  } else {
+    saveProduct(name, price, image);
+  }
 }
+
+function saveProduct(name, price, image) {
+  const newProduct = { name, price, image };
+  firebase.database().ref('produits').push(newProduct).then(() => {
+    alert("Produit ajouté !");
+    document.getElementById("productName").value = "";
+    document.getElementById("productPrice").value = "";
+    document.getElementById("productImage").value = "";
+    displayProducts();
+    displayAdminProducts();
+  });
+}
+
+function deleteProduct(productKey) {
+  if (confirm("Voulez-vous vraiment supprimer ce produit ?")) {
+    firebase.database().ref('produits/' + productKey).remove().then(() => {
+      alert("Produit supprimé !");
+      displayProducts();
+      displayAdminProducts();
+    });
+  }
+}
+
+function displayAdminProducts() {
+  firebase.database().ref('produits').once('value', (snapshot) => {
+    const adminList = document.getElementById("adminProductList");
+    adminList.innerHTML = "";
+    const products = snapshot.val() || {};
+
+    Object.keys(products).forEach((key) => {
+      const p = products[key];
+      const div = document.createElement("div");
+      div.className = "admin-product";
+      div.innerHTML = `
+        <div style="display:flex; align-items: center;">
+          <img src="${p.image}" alt="Produit">
+          <div>
+            <strong>${p.name}</strong><br>
+            <small>${p.price} CFA</small>
+          </div>
+        </div>
+        <button class="delete-button" onclick="deleteProduct('${key}')">Supprimer</button>
+      `;
+      adminList.appendChild(div);
+    });
+  });
+}
+
+// Activation section admin
+document.addEventListener("keydown", function(event) {
+  if (event.ctrlKey && event.shiftKey && event.key === "A") {
+    const pass = prompt("Entrez le mot de passe Admin :");
+    if (pass === "16181694y") {
+      document.getElementById("adminPage").style.display = "block";
+      displayAdminProducts();
+    } else {
+      alert("Mot de passe incorrect");
+    }
+  }
+});
+
+function showCart() {
+  alert("Panier : " + cart.length + " produit(s).");
+}
+
+// Affichage initial
+displayProducts();
