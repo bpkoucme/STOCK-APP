@@ -3,33 +3,32 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chez Ousmane - Boutique</title>
+    <title>Chez Ousmane - Admin</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
 <header>
-    <h1>Chez Ousmane - Boutique</h1>
+    <h1>Chez Ousmane - Admin</h1>
 </header>
 
-<section id="products">
-    <!-- Les articles s'afficheront ici automatiquement -->
+<section id="addProduct">
+    <h2>Ajouter un article</h2>
+    <input type="text" id="productName" placeholder="Nom de l'article">
+    <input type="text" id="productPrice" placeholder="Prix">
+    <input type="text" id="productCategory" placeholder="Catégorie (Ex: Matelas)">
+    <input type="text" id="productImage" placeholder="URL de l'image">
+    <button onclick="addProduct()">Ajouter l'article</button>
 </section>
 
-<div id="orderForm" style="display: none;">
-    <h2>Commander</h2>
-    <input type="text" id="customerName" placeholder="Votre Nom">
-    <input type="text" id="customerPhone" placeholder="Votre Numéro">
-    <input type="text" id="customerAddress" placeholder="Votre Adresse">
-    <button onclick="submitOrder()">Valider la Commande</button>
-</div>
+<section id="orderList">
+    <h2>Commandes Client</h2>
+    <ul id="orders"></ul>
+</section>
 
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
 <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-<script src="app.js"></script>
-<script>
-    loadProducts(); // Charge les articles dès que la page s'ouvre
-</script>
+<script src="admin.js"></script>
 
 </body>
 </html>
