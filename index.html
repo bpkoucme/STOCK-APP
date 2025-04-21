@@ -1,35 +1,34 @@
 <!DOCTYPE html>
 <html lang="fr">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Chez Ousmane - Boutique</title>
-    <link rel="stylesheet" href="style.css">
+  <meta charset="UTF-8">
+  <title>Bon Prix KOUCMÉ</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
+  <div class="container">
+    <div class="header">Bon Prix KOUCMÉ</div>
+    <div class="logo">Logo</div>
+    <h2>Nos Produits</h2>
+    <div id="productList"></div>
+    <button id="cartButton" class="cart-button hidden" onclick="showCart()">Voir Panier (<span id="cartCount">0</span>)</button>
+  </div>
 
-<header>
-    <h1>Chez Ousmane - Boutique</h1>
-</header>
+  <!-- Section Admin -->
+  <div class="admin-section" id="adminPage">
+    <h2>Administration</h2>
+    <div>
+      <input type="text" id="productName" placeholder="Nom du produit">
+      <input type="number" id="productPrice" placeholder="Prix (CFA)">
+      <input type="file" id="productImage" accept="image/*">
+      <button onclick="addProduct()">Ajouter</button>
+    </div>
+    <h3>Liste des produits</h3>
+    <div id="adminProductList"></div>
+  </div>
 
-<section id="products">
-    <!-- Les articles s'afficheront ici automatiquement -->
-</section>
-
-<div id="orderForm" style="display: none;">
-    <h2>Commander</h2>
-    <input type="text" id="customerName" placeholder="Votre Nom">
-    <input type="text" id="customerPhone" placeholder="Votre Numéro">
-    <input type="text" id="customerAddress" placeholder="Votre Adresse">
-    <button onclick="submitOrder()">Valider la Commande</button>
-</div>
-
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
-<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
-<script src="app.js"></script>
-<script>
-    loadProducts(); // Charge les articles dès que la page s'ouvre
-</script>
-
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.11/firebase-database-compat.js"></script>
+  <script src="app.js"></script>
 </body>
 </html>
