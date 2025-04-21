@@ -1,30 +1,38 @@
-// Configuration Firebase (même config que app.js)
+// Configuration Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyD3-7...",  // remplace ici avec ta clé
-    authDomain: "ton-projet.firebaseapp.com",
-    databaseURL: "https://ton-projet.firebaseio.com",
-    projectId: "ton-projet",
-    storageBucket: "ton-projet.appspot.com",
-    messagingSenderId: "000000000",
-    appId: "1:000000000:web:abcdef"
+    apiKey: "AIzaSyBOFN1uxZKtcVc_kstMe1mHoaFY9CNS3uA",
+    authDomain: "monstockapp-73c82.firebaseapp.com",
+    databaseURL: "https://monstockapp-73c82-default-rtdb.firebaseio.com",
+    projectId: "monstockapp-73c82",
+    storageBucket: "monstockapp-73c82.appspot.com",
+    messagingSenderId: "903263639703",
+    appId: "1:903263639703:web:ff08550aa21db9c25231d2"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-const adminRapportList = document.getElementById("adminRapportList");
-
-function chargerMouvements() {
-    adminRapportList.innerHTML = "Chargement...";
-    db.ref("stocks").on("value", snapshot => {
-        adminRapportList.innerHTML = "";
+// Charger les commandes en temps réel
+function loadOrders() {
+    const orderList = document.getElementById("orderList");
+    db.ref("orders").on("value", snapshot => {
+        orderList.innerHTML = "";
         snapshot.forEach(child => {
-            const data = child.val();
-            const li = document.createElement("li");
-            li.textContent = `[${data.date}] ${data.action} - ${data.code} : ${data.quantite}`;
-            adminRapportList.appendChild(li);
+            const order = child.val();
+            const div = document.createElement("div");
+            div.className = "order-item";
+            div.innerHTML = `
+                <strong>Client:</strong> ${order.name}<br>
+                <strong>Téléphone:</strong> ${order.phone}<br>
+                <strong>Adresse:</strong> ${order.address}<br>
+                <strong>Produit ID:</strong> ${order.productId}<br>
+                <strong>Date:</strong> ${order.date}
+                <hr>
+            `;
+            orderList.appendChild(div);
         });
     });
 }
 
-chargerMouvements();
+// Lancer dès que la page est chargée
+window.onload = loadOrders;
