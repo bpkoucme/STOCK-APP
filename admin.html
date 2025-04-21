@@ -3,23 +3,33 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Administrateur - Gestion de Stock</title>
+    <title>Chez Ousmane - Boutique</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header>
-        <h1>BON PRIX KOUCMÉ - ADMIN</h1>
-    </header>
 
-    <main>
-        <section id="adminRapportSection">
-            <h2>Historique des Mouvements</h2>
-            <ul id="adminRapportList"></ul>
-        </section>
-    </main>
+<header>
+    <h1>Chez Ousmane - Boutique</h1>
+</header>
 
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
-    <script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-database-compat.js"></script>
-    <script src="admin.js"></script>
+<section id="products">
+    <!-- Les articles s'afficheront ici automatiquement -->
+</section>
+
+<div id="orderForm" style="display: none;">
+    <h2>Commander</h2>
+    <input type="text" id="customerName" placeholder="Votre Nom">
+    <input type="text" id="customerPhone" placeholder="Votre Numéro">
+    <input type="text" id="customerAddress" placeholder="Votre Adresse">
+    <button onclick="submitOrder()">Valider la Commande</button>
+</div>
+
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+<script src="app.js"></script>
+<script>
+    loadProducts(); // Charge les articles dès que la page s'ouvre
+</script>
+
 </body>
 </html>
