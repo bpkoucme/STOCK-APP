@@ -1,94 +1,71 @@
-// Configuration Firebase (ta config)
+// Configuration Firebase
 const firebaseConfig = {
-    apiKey: "AIzaSyD3-7...",  // remplace ici avec ta clé
-    authDomain: "ton-projet.firebaseapp.com",
-    databaseURL: "https://ton-projet.firebaseio.com",
-    projectId: "ton-projet",
-    storageBucket: "ton-projet.appspot.com",
-    messagingSenderId: "000000000",
-    appId: "1:000000000:web:abcdef"
+    apiKey: "AIzaSyBOFN1uxZKtcVc_kstMe1mHoaFY9CNS3uA",
+    authDomain: "monstockapp-73c82.firebaseapp.com",
+    databaseURL: "https://monstockapp-73c82-default-rtdb.firebaseio.com",
+    projectId: "monstockapp-73c82",
+    storageBucket: "monstockapp-73c82.appspot.com",
+    messagingSenderId: "903263639703",
+    appId: "1:903263639703:web:ff08550aa21db9c25231d2"
 };
 
 firebase.initializeApp(firebaseConfig);
 const db = firebase.database();
 
-const btnEntree = document.getElementById("btnEntree");
-const btnSortie = document.getElementById("btnSortie");
-const btnScan = document.getElementById("btnScan");
-const btnRapport = document.getElementById("btnRapport");
-const formSection = document.getElementById("formSection");
-const rapportSection = document.getElementById("rapportSection");
-const formTitle = document.getElementById("formTitle");
-const productCode = document.getElementById("productCode");
-const productQuantity = document.getElementById("productQuantity");
-const btnValider = document.getElementById("btnValider");
-const rapportList = document.getElementById("rapportList");
+function loadProducts() {
+    const productSection = document.getElementById("products");
+    db.ref("products").on("value", snapshot => {
+        productSection.innerHTML = "";
+        snapshot.forEach(child => {
+            const product = child.val();
+            const div = document.createElement("div");
+            div.className = "product-item";
+            div.innerHTML = `
+                <img src="${product.image}" alt="${product.name}">
+                <h3>${product.name}</h3>
+                <p>${product.category}</p>
+                <strong>${product.price} Fcfa</strong><br>
+                <button onclick="openOrderForm('${child.key}')">Commander</button>
+            `;
+            productSection.appendChild(div);
+        });
+    });
+}
 
-let currentAction = "";
+let selectedProductId = null;
 
-btnEntree.onclick = () => {
-    formSection.style.display = "block";
-    rapportSection.style.display = "none";
-    formTitle.innerText = "Entrée de Stock";
-    currentAction = "entree";
-};
+function openOrderForm(productId) {
+    selectedProductId = productId;
+    document.getElementById("orderForm").style.display = "block";
+}
 
-btnSortie.onclick = () => {
-    formSection.style.display = "block";
-    rapportSection.style.display = "none";
-    formTitle.innerText = "Sortie de Stock";
-    currentAction = "sortie";
-};
+function submitOrder() {
+    const name = document.getElementById("customerName").value.trim();
+    const phone = document.getElementById("customerPhone").value.trim();
+    const address = document.getElementById("customerAddress").value.trim();
 
-btnScan.onclick = () => {
-    formSection.style.display = "block";
-    rapportSection.style.display = "none";
-    formTitle.innerText = "Scanner Code";
-    currentAction = "scan";
-};
-
-btnRapport.onclick = () => {
-    formSection.style.display = "none";
-    rapportSection.style.display = "block";
-    afficherRapport();
-};
-
-btnValider.onclick = () => {
-    const code = productCode.value.trim();
-    const quantite = parseInt(productQuantity.value.trim());
-
-    if (!code || isNaN(quantite)) {
-        alert("Remplis bien tous les champs!");
+    if (!name || !phone || !address || !selectedProductId) {
+        alert("Veuillez remplir tous les champs.");
         return;
     }
 
-    const timestamp = Date.now();
-    const data = {
-        code,
-        quantite,
-        action: currentAction,
+    const order = {
+        name,
+        phone,
+        address,
+        productId: selectedProductId,
         date: new Date().toLocaleString()
     };
 
-    db.ref("stocks/" + timestamp).set(data).then(() => {
-        alert("Enregistré avec succès!");
-        productCode.value = "";
-        productQuantity.value = "";
-        formSection.style.display = "none";
-    }).catch(error => {
-        alert("Erreur : " + error.message);
-    });
-};
-
-function afficherRapport() {
-    rapportList.innerHTML = "Chargement...";
-    db.ref("stocks").once("value").then(snapshot => {
-        rapportList.innerHTML = "";
-        snapshot.forEach(child => {
-            const item = child.val();
-            const li = document.createElement("li");
-            li.textContent = `[${item.date}] ${item.action} - ${item.code} : ${item.quantite}`;
-            rapportList.appendChild(li);
-        });
+    db.ref("orders").push(order, error => {
+        if (error) {
+            alert("Erreur lors de l'envoi !");
+        } else {
+            alert("Commande envoyée avec succès !");
+            document.getElementById("orderForm").style.display = "none";
+            document.getElementById("customerName").value = "";
+            document.getElementById("customerPhone").value = "";
+            document.getElementById("customerAddress").value = "";
+        }
     });
 }
