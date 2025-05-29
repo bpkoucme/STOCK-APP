@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <title>Bon Prix Koucmé - Boutique</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    body { font-family: Arial, sans-serif; background: #f1f1f1; margin: 0; padding: 0; }
+    header { background: #2c3e50; color: white; padding: 15px; text-align: center; font-size: 24px; }
+    .container { max-width: 800px; margin: auto; padding: 20px; }
+    .product, .form-area, .admin-area { background: white; border-radius: 10px; padding: 15px; margin-bottom: 15px; border: 1px solid #ccc; }
+    .btn { background: #27ae60; color: white; padding: 10px 15px; border: none; border-radius: 5px; cursor: pointer; }
+    .btn.danger { background: #c0392b; }
+    input, textarea { width: 100%; padding: 8px; margin: 5px 0 15px 0; }
+    #admin-section, #form-area { display: none; }
+    #admin-login { margin-bottom: 15px; }
+  </style>
+</head>
+<body>
+
+<header>
+  Bon Prix Koucmé - Boutique en ligne
+</header>
+
+<div class="container">
+
+  <button class="btn danger" onclick="toggleAdminLogin()">Espace admin</button>
+
+  <!-- Espace client -->
+  <div id="products"></div>
+
+  <!-- Formulaire de commande -->
+  <div id="form-area" class="form-area">
+    <h3>Passer une commande</h3>
+    <form id="commande-form">
+      <input type="text" id="produit" readonly>
+      <input type="number" id="prix" readonly>
+      <input type="text" id="nom" placeholder="Votre nom" required>
+      <input type="text" id="telephone" placeholder="Téléphone" required>
+      <textarea id="adresse" placeholder="Adresse de livraison" required></textarea>
+      <button class="btn" type="submit">Envoyer la commande</button>
+    </form>
+  </div>
+
+  <!-- Auth admin -->
+  <div id="admin-login" class="form-area">
+    <h3>Connexion admin</h3>
+    <input type="password" id="admin-pass" placeholder="Mot de passe admin">
+    <button class="btn" onclick="loginAdmin()">Valider</button>
+  </div>
+
+  <!-- Interface admin -->
+  <div id="admin-section" class="admin-area">
+    <h3>Ajouter un produit</h3>
+    <input type="text" id="nom-produit" placeholder="Nom du produit">
+    <input type="number" id="prix-produit" placeholder="Prix (FCFA)">
+    <textarea id="desc-produit" placeholder="Description (optionnelle)"></textarea>
+    <button class="btn" onclick="ajouterProduit()">Ajouter</button>
+  </div>
+
+</div>
+
+<!-- Firebase -->
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.2/firebase-firestore-compat.js"></script>
+<script>
+  const firebaseConfig = {
+    apiKey: "AIzaSyBOFN1uxZKtcVc_kstMe1mHoaFY9CNS3uA",
+    authDomain: "monstockapp-73c82.firebaseapp.com",
+    projectId: "monstockapp-73c82",
+    storageBucket: "monstockapp-73c82.firebasestorage.app",
+    messagingSenderId: "903263639703",
+    appId: "1:903263639703:web:ff08550aa21db9c25231d2"
+  };
+  firebase.initializeApp(firebaseConfig);
+  const db = firebase.firestore();
+
+  // Charger les produits automatiquement
+  function chargerProduits() {
+    db.collection("produits").onSnapshot((snapshot) => {
+      const container = document.getElementById("products");
+      container.innerHTML = "";
+      snapshot.forEach(doc => {
+        const data = doc.data();
+        container.innerHTML += `
+          <div class="product">
+            <h3>${data.nom}</h3>
+            <p>${data.description || ''}</p>
+            <p>Prix : ${data.prix} FCFA</p>
+            <button class="btn" onclick="commander('${data.nom}', ${data.prix})">Commander</button>
+          </div>
+        `;
+      });
+    });
+  }
+
+  chargerProduits();
+
+  // Commander
+  function commander(nom, prix) {
+    document.getElementById("form-area").style.display = 'block';
+    document.getElementById("produit").value = nom;
+    document.getElementById("prix").value = prix;
+    window.scrollTo(0, document.body.scrollHeight);
+  }
+
+  document.getElementById("commande-form").addEventListener("submit", async function(e) {
+    e.preventDefault();
+    const data = {
+      produit: document.getElementById("produit").value,
+      prix: parseInt(document.getElementById("prix").value),
+      nom: document.getElementById("nom").value,
+      telephone: document.getElementById("telephone").value,
+      adresse: document.getElementById("adresse").value,
+      date: new Date().toISOString()
+    };
+    try {
+      await db.collection("commandes").add(data);
+      alert("Commande envoyée !");
+      document.getElementById("commande-form").reset();
+      document.getElementById("form-area").style.display = 'none';
+    } catch (err) {
+      alert("Erreur : " + err.message);
+    }
+  });
+
+  // Admin Login
+  function toggleAdminLogin() {
+    const loginBox = document.getElementById("admin-login");
+    loginBox.style.display = loginBox.style.display === 'none' ? 'block' : 'none';
+  }
+
+  function loginAdmin() {
+    const pass = document.getElementById("admin-pass").value;
+    if (pass === "16181694y") {
+      document.getElementById("admin-section").style.display = 'block';
+      document.getElementById("admin-login").style.display = 'none';
+    } else {
+      alert("Mot de passe incorrect");
+    }
+  }
+
+  // Ajouter produit
+  async function ajouterProduit() {
+    const nom = document.getElementById("nom-produit").value;
+    const prix = parseInt(document.getElementById("prix-produit").value);
+    const desc = document.getElementById("desc-produit").value;
+
+    if (!nom || !prix) {
+      alert("Nom et prix obligatoires");
+      return;
+    }
+
+    try {
+      await db.collection("produits").add({ nom, prix, description: desc });
+      alert("Produit ajouté !");
+      document.getElementById("nom-produit").value = "";
+      document.getElementById("prix-produit").value = "";
+      document.getElementById("desc-produit").value = "";
+    } catch (err) {
+      alert("Erreur ajout : " + err.message);
+    }
+  }
+</script>
+
+</body>
+</html>
